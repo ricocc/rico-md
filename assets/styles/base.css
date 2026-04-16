@@ -30,7 +30,7 @@
   /* Layout */
   --header-height: 46px;
   --status-bar-height: 26px;
-  --sidebar-width: 220px;
+  --sidebar-width: 280px;
   --side-panel-width: 380px;
 
   /* UI */
@@ -56,6 +56,25 @@ body {
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
+}
+
+.lucide {
+  display: block;
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle .lucide,
+.github-link .lucide,
+.settings-panel-close .lucide {
+  width: 18px;
+  height: 18px;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -113,7 +132,10 @@ body {
 .sidebar-toggle:hover {
   background: var(--color-bg);
   color: var(--color-primary);
+  transform: translateY(-1px);
 }
+
+.sidebar-toggle:active { transform: translateY(0); }
 
 .logo {
   font-size: 14px;
@@ -138,7 +160,7 @@ body {
   border: none;
   border-radius: var(--radius-sm);
   color: var(--color-secondary);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -146,8 +168,9 @@ body {
 }
 
 .header-nav-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
-.header-nav-btn:hover { color: var(--color-primary); background: var(--color-bg); }
+.header-nav-btn:hover { color: var(--color-primary); background: var(--color-bg); transform: translateY(-1px); }
 .header-nav-btn.active { color: var(--color-accent); background: rgba(0,102,255,.06); }
+.header-nav-btn:active { transform: translateY(0); }
 
 .header-divider {
   width: 1px;
@@ -174,7 +197,8 @@ body {
   transition: all var(--transition-fast);
   text-decoration: none;
 }
-.github-link:hover { background: var(--color-bg); color: var(--color-primary); }
+.github-link:hover { background: var(--color-bg); color: var(--color-primary); transform: translateY(-1px); }
+.github-link:active { transform: translateY(0); }
 
 /* ══════════════════════════════════════════════════════════════
    Main area: horizontal flex — sidebar? + editor + preview (+ right-panel)
@@ -264,7 +288,7 @@ body {
   padding: 8px 12px;
   border: none;
   background: transparent;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-tertiary);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -299,7 +323,10 @@ body {
 .right-panel-close:hover {
   background: var(--color-bg);
   color: var(--color-primary);
+  transform: translateY(-1px);
 }
+
+.right-panel-close:active { transform: translateY(0); }
 
 .right-panel-body {
   flex: 1;
@@ -376,7 +403,10 @@ body {
 .settings-panel-close:hover {
   background: var(--color-bg);
   color: var(--color-primary);
+  transform: translateY(-1px);
 }
+
+.settings-panel-close:active { transform: translateY(0); }
 
 .settings-panel-body {
   flex: 1;
@@ -417,15 +447,33 @@ body {
   background: transparent;
   border-radius: var(--radius-sm);
   color: var(--color-secondary);
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
   transition: all var(--transition-fast);
   text-align: left;
 }
-.sidebar-action-btn:hover { background: var(--color-bg); color: var(--color-primary); }
+.sidebar-action-btn:hover { background: var(--color-bg); color: var(--color-primary); transform: translateY(-1px); }
 .sidebar-action-btn.primary { background: var(--color-accent); color: white; font-weight: 500; }
 .sidebar-action-btn.primary:hover { background: #0052CC; }
+.sidebar-action-btn:active { transform: translateY(0); }
 .sidebar-action-btn svg { flex-shrink: 0; }
+
+.sidebar-search-input {
+  width: 100%;
+  margin-bottom: var(--space-sm);
+  padding: 7px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+
+.sidebar-search-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+}
 
 .sidebar-doc-list { display: flex; flex-direction: column; gap: 2px; }
 
@@ -435,7 +483,7 @@ body {
   gap: 7px;
   padding: 6px 8px;
   border-radius: var(--radius-sm);
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -453,12 +501,27 @@ body {
 }
 
 .sidebar-doc-title {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.4;
   color: inherit;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.sidebar-doc-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sidebar-doc-dirty {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #FF8A00;
+  flex-shrink: 0;
 }
 
 .sidebar-doc-time {
@@ -473,6 +536,45 @@ body {
 .sidebar-doc-item.active .sidebar-doc-time {
   color: #4F79D6;
 }
+
+.sidebar-doc-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.sidebar-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--color-light-border);
+  background: var(--color-surface);
+  color: var(--color-secondary);
+  border-radius: 4px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-icon-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sidebar-icon-btn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-border);
+  transform: translateY(-1px);
+}
+
+.sidebar-icon-btn.danger {
+  color: #D32F2F;
+}
+
+.sidebar-icon-btn:active { transform: translateY(0); }
 
 /* Sidebar slide transition */
 .sidebar-enter-active, .sidebar-leave-active {
@@ -507,7 +609,9 @@ body {
 }
 
 .status-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-.status-saved { color: #00C853; }
+.status-saved, .status-saved svg { color: #00C853; }
+.status-saving { color: #FF8A00; }
+.status-error { color: #D32F2F; }
 
 /* ── Toast ── */
 .toast-container { position: fixed; bottom: var(--space-lg); right: var(--space-lg); z-index: 2000; }
@@ -554,8 +658,8 @@ body {
     box-shadow: var(--shadow-lg);
   }
 
-  .main-area { 
-    flex-direction: column; 
+  .main-area {
+    flex-direction: column;
   }
 
   .editor-panel {
@@ -570,8 +674,8 @@ body {
     display: none;
   }
 
-  .preview-panel { 
-    flex: 1; 
+  .preview-panel {
+    flex: 1;
     width: 100% !important;
   }
 
@@ -579,8 +683,8 @@ body {
     display: none;
   }
 
-  .right-panel { 
-    width: 100% !important; 
+  .right-panel {
+    width: 100% !important;
     max-width: none;
   }
 

@@ -4,43 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rico MD - 公众号 Markdown 编辑器</title>
-  <meta name="description" content="Rico MD - 一个专为微信公众号设计的 Markdown 编辑器，支持实时预览、一键复制富文本、18 种精美样式主题、智能图片处理">
-  <meta name="keywords" content="公众号编辑器,Markdown编辑器,微信排版,富文本复制,Markdown转公众号">
+  <meta name="description" content="Rico MD 是一个面向微信公众号写作的 Markdown 编辑器，支持实时预览、代码块主题、图片粘贴和富文本复制。">
+  <meta name="keywords" content="公众号编辑器,Markdown编辑器,微信排版,Markdown转公众号,富文本复制">
   <meta name="author" content="Rico">
-  <meta property="og:title" content="Rico MD - 公众号 Markdown 编辑器">
-  <meta property="og:description" content="一个专为微信公众号设计的 Markdown 编辑器，支持实时预览、一键复制">
-  <meta property="og:url" content="https://aigocode.com/invite/D9M2K57E">
-  <meta property="og:type" content="website">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.png">
-  <link rel="alternate icon" href="assets/images/favicon.png">
-  <link rel="mask-icon" href="assets/images/favicon.png" color="#0066FF">
-
-  <!-- CSS -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
   <link rel="stylesheet" href="assets/styles/base.css">
   <link rel="stylesheet" href="assets/styles/editor.css">
   <link rel="stylesheet" href="assets/styles/panel.css">
 
-  <!-- Markdown 渲染库 -->
   <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.0.0/dist/markdown-it.min.js"></script>
-
-  <!-- 代码高亮库 -->
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js"></script>
-
-  <!-- Turndown - HTML 转 Markdown -->
   <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/dist/turndown.js"></script>
-
-  <!-- Vue.js -->
   <script src="https://cdn.jsdelivr.net/npm/vue@3.4.15/dist/vue.global.prod.js"></script>
 </head>
 <body>
   <div id="app">
-    <!-- 顶部栏：Logo左侧 + 导航/GitHub右侧 -->
     <header class="header">
       <div class="header-left">
         <button class="sidebar-toggle" @click="sidebarOpen = !sidebarOpen" title="文档管理">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg class="lucide lucide-panel-left-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m14 9 3 3-3 3"></path></svg>
         </button>
         <div class="logo">
           <span>Rico MD</span>
@@ -49,81 +32,129 @@
       <div class="header-right">
         <nav class="header-nav">
           <button class="header-nav-btn" :class="{ active: activePanel === 'theme' }" @click="togglePanel('theme')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+
+            <svg class="lucide lucide-palette"  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette-icon lucide-palette"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+
             主题
           </button>
           <button class="header-nav-btn" :class="{ active: activePanel === 'code' }" @click="togglePanel('code')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <svg class="lucide lucide-code-xml" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg>
             代码
           </button>
           <button class="header-nav-btn" :class="{ active: activePanel === 'settings' }" @click="togglePanel('settings')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <svg class="lucide lucide-settings-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+            设置
           </button>
         </nav>
         <span class="header-divider"></span>
         <span class="creator-info">by <a href="https://ricoui.com" target="_blank" rel="noopener noreferrer">Rico</a></span>
-        <a href="https://github.com/ricocc/rico-md"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="github-link"
-           title="查看源码">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
+        <a href="https://github.com/ricocc/rico-md" target="_blank" rel="noopener noreferrer" class="github-link" title="查看源码">
+          <svg class="lucide lucide-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-.09-1.1 3.7 3.7 0 0 0 2.84-3.6c0-1-.3-1.9-.8-2.6.1-.4.3-1.3-.1-2.6 0 0-.8-.2-2.6.9a9.2 9.2 0 0 0-4.8 0c-1.8-1.1-2.6-.9-2.6-.9-.4 1.3-.2 2.2-.1 2.6-.5.7-.8 1.6-.8 2.6a3.7 3.7 0 0 0 2.84 3.6A4.8 4.8 0 0 0 9 18v4"></path><path d="M9 18c-4.5 2-5-2-7-2"></path></svg>
+
         </a>
       </div>
     </header>
 
-    <!-- 主内容区：左侧边栏 + 编辑器 + 预览 + 右侧面板 -->
     <div class="main-area" :class="{ 'has-right-panel': activePanel === 'theme' || activePanel === 'code' }">
-      <!-- 左侧文档栏 -->
       <transition name="sidebar">
         <aside v-if="sidebarOpen" class="sidebar">
           <div class="sidebar-section">
-            <button class="sidebar-action-btn primary" @click="clearEditor">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <button class="sidebar-action-btn primary" @click="createNewDocument('', '')">
+              <svg class="lucide lucide-file-plus-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 18v-6"></path><path d="M9 15h6"></path></svg>
               新增文档
             </button>
           </div>
+
           <div class="sidebar-section">
             <div class="sidebar-section-title">文档列表</div>
+            <input
+              v-model="documentSearch"
+              class="sidebar-search-input"
+              type="text"
+              placeholder="搜索文档"
+            >
             <div class="sidebar-doc-list">
               <div
-                v-for="doc in documents"
+                v-for="doc in filteredDocuments"
                 :key="doc.id"
                 class="sidebar-doc-item"
                 :class="{ active: activeDocumentId === doc.id }"
                 @click="switchDocument(doc.id)"
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <svg class="lucide lucide-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg>
                 <div class="sidebar-doc-meta">
-                  <span class="sidebar-doc-title">{{ getDocumentDisplayTitle(doc) }}</span>
+                  <div class="sidebar-doc-title-row">
+                    <span class="sidebar-doc-title">{{ getDocumentDisplayTitle(doc) }}</span>
+                    <span v-if="doc.dirty" class="sidebar-doc-dirty" title="未保存"></span>
+                  </div>
                   <span class="sidebar-doc-time">保存于 {{ formatDateTime(doc.updatedAt) }}</span>
+                  <div class="sidebar-doc-actions">
+                    <button class="sidebar-icon-btn" @click.stop="duplicateDocument(doc.id)" title="复制文档">
+                      <svg class="lucide lucide-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                      </svg>
+                    </button>
+                    <button class="sidebar-icon-btn danger" @click.stop="deleteDocument(doc.id)" title="删除文档">
+                      <svg class="lucide lucide-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 6h18"></path>
+                        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"></path>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                        <path d="M10 11v6"></path>
+                        <path d="M14 11v6"></path>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="sidebar-section">
             <div class="sidebar-section-title">操作</div>
             <button class="sidebar-action-btn" @click="$refs.mdUploadSidebar.click()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <svg class="lucide lucide-file-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="m12 18 3-3"></path><path d="m12 18-3-3"></path><path d="M12 12v6"></path></svg>
               导入 .md
             </button>
             <input ref="mdUploadSidebar" type="file" accept=".md,.markdown" @change="handleFileUpload" style="display: none;">
+
             <button class="sidebar-action-btn" @click="exportMarkdown">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg class="lucide lucide-file-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="m12 12 3 3"></path><path d="m12 12-3 3"></path><path d="M12 18v-6"></path></svg>
               导出 Markdown
             </button>
             <button class="sidebar-action-btn" @click="exportHTML">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <svg class="lucide lucide-code-xml" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg>
               导出 HTML
             </button>
           </div>
         </aside>
       </transition>
 
-      <!-- 编辑器面板 -->
       <div class="editor-panel" :style="editorWidth ? { flex: 'none', width: editorWidth + '%' } : {}">
+        <div class="editor-composer">
+          <div class="editor-header">
+          <input
+            v-model="currentDocumentTitle"
+            class="document-title-input"
+            type="text"
+            placeholder="输入文档标题"
+          >
+          <div class="editor-toolbar">
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertHeading(1)">H1</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertHeading(2)">H2</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertHeading(3)">H3</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="wrapSelection('**', '**')">加粗</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="wrapSelection('*', '*')">斜体</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertQuote">引用</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertCodeBlock">代码块</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertDivider">分割线</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertImageSyntax">图片语法</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="$refs.editorImageUpload.click()">上传图片</button>
+            <button class="editor-tool-btn" @mousedown.prevent @click="insertTable">表格</button>
+          </div>
+          <input ref="editorImageUpload" type="file" accept="image/*" @change="handleToolbarImageUpload" style="display:none;">
+        </div>
+
         <div class="markdown-input-container">
           <textarea
             v-model="markdownInput"
@@ -135,98 +166,71 @@
             @dragenter="handleDragEnter"
             @dragleave="handleDragLeave"
             @keydown="handleKeydown"
-            placeholder="# 在这里粘贴或输入 Markdown 内容
-
-## 功能特点
-
-- **实时预览**：所见即所得
-- **18 种样式**：随意切换
-- **智能粘贴**：支持从飞书、Notion、Word 直接粘贴
-- **图片支持**：直接粘贴或拖拽图片
-- **一键复制**：直接粘贴到公众号"
+            @focus="syncEditorSelection"
+            @click="syncEditorSelection"
+            @mouseup="syncEditorSelection"
+            @keyup="syncEditorSelection"
+            @select="syncEditorSelection"
+            @input="syncEditorSelection"
             spellcheck="false"
+            placeholder="# 在这里输入 Markdown 内容"
           ></textarea>
+        </div>
         </div>
       </div>
 
-      <!-- 分割线：编辑器与预览 -->
       <div class="resize-handle" data-handle="editor-preview"></div>
 
-      <!-- 预览面板 -->
       <div class="preview-panel">
-        <!-- 预览工具栏 -->
         <div class="preview-toolbar">
           <div class="device-toggle">
             <button class="device-toggle-btn" :class="{ active: previewMode === 'mobile' }" @click="previewMode = 'mobile'" title="手机预览">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+              <svg class="lucide lucide-smartphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
             </button>
             <button class="device-toggle-btn" :class="{ active: previewMode === 'desktop' }" @click="previewMode = 'desktop'" title="桌面预览">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <svg class="lucide lucide-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg>
             </button>
           </div>
+
           <div class="copy-buttons">
-            <button
-              class="copy-btn twitter-btn"
-              :disabled="!renderedContent"
-              @click="copyToTwitter"
-              title="复制到 X (Twitter)"
-            >
-              复制到
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            <button class="copy-btn twitter-btn" :disabled="!renderedContent" @click="copyToTwitter" title="复制到 X">
+              复制文本
             </button>
-            <button
-              class="copy-btn"
-              :class="{ success: copySuccess }"
-              :disabled="!renderedContent"
-              @click="doCopy"
-            >
+            <button class="copy-btn" :class="{ success: copySuccess }" :disabled="!renderedContent" @click="doCopy">
               {{ copySuccess ? '已复制' : '复制到公众号' }}
             </button>
           </div>
         </div>
 
-        <!-- 预览内容 -->
-        <div class="preview-content">
+        <div class="preview-content" @click="handlePreviewClick">
           <div v-if="!renderedContent" class="empty-state">
-            <svg class="empty-state-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+            <svg class="lucide lucide-file-pen-line empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h-6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8l6 6v3"></path><path d="M14 2v6h6"></path><path d="M15 18.5 18.5 15"></path><path d="M18 14.5 20.5 17"></path><path d="M13 20l1.5-4.5"></path></svg>
             <h3>开始编辑</h3>
-            <p>左侧输入 Markdown，右侧实时预览</p>
+            <p>左侧输入 Markdown，右侧实时预览。</p>
           </div>
           <div v-else class="preview-container" :class="{ 'mobile-mode': previewMode === 'mobile' }" v-html="renderedContent"></div>
         </div>
       </div>
 
-      <!-- 分割线：预览与右侧面板 -->
       <div class="resize-handle" data-handle="preview-right" v-if="activePanel === 'theme' || activePanel === 'code'"></div>
 
-      <!-- 右侧面板（主题/代码） -->
       <transition name="right-panel-slide">
         <div v-if="activePanel === 'theme' || activePanel === 'code'" class="right-panel" :style="rightPanelWidth ? { width: rightPanelWidth + 'px' } : {}">
           <div class="right-panel-tabs">
-            <button 
-              class="right-panel-tab" 
-              :class="{ active: activePanel === 'theme' }"
-              @click="togglePanel('theme')"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+            <button class="right-panel-tab" :class="{ active: activePanel === 'theme' }" @click="togglePanel('theme')">
+              <svg class="lucide lucide-palette"  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette-icon lucide-palette"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/></svg>
               主题
             </button>
-            <button 
-              class="right-panel-tab" 
-              :class="{ active: activePanel === 'code' }"
-              @click="togglePanel('code')"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <button class="right-panel-tab" :class="{ active: activePanel === 'code' }" @click="togglePanel('code')">
+              <svg class="lucide lucide-code-xml" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 16 4-4-4-4"></path><path d="m6 8-4 4 4 4"></path><path d="m14.5 4-5 16"></path></svg>
               代码
             </button>
             <button class="right-panel-close" @click="togglePanel(activePanel)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <svg class="lucide lucide-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
             </button>
           </div>
+
           <div class="right-panel-body">
-            <!-- 主题面板 -->
             <template v-if="activePanel === 'theme'">
               <div class="theme-grid">
                 <template v-for="cat in categorizedThemes" :key="cat.category">
@@ -247,7 +251,6 @@
               </div>
             </template>
 
-            <!-- 代码主题面板 -->
             <template v-if="activePanel === 'code'">
               <div class="code-theme-grid">
                 <div
@@ -267,37 +270,40 @@
       </transition>
     </div>
 
-    <!-- 底部状态栏 -->
     <footer class="status-bar">
-      <div class="status-left">
-        <span class="status-item status-saved">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          已保存
-        </span>
-      </div>
-      <div class="status-right">
-        <span class="status-item">{{ charCount }} 字符 · {{ wordCount }} 词</span>
-        <span class="status-item">最后更新：{{ lastUpdateTime }}</span>
-      </div>
+      <span class="status-item" :class="getSaveStateClass()">{{ getSaveStateLabel() }}</span>
+      <span class="status-item">{{ charCount }} 字符 · {{ wordCount }} 词 · 预计 {{ readTime }} 分钟</span>
+      <span class="status-item">最后保存：{{ lastSavedTime }}</span>
     </footer>
 
-    <!-- 设置面板覆盖层 -->
     <transition name="side-panel">
       <div v-if="activePanel === 'settings'" class="settings-overlay">
         <div class="settings-panel">
           <div class="settings-panel-header">
             <h3 class="settings-panel-title">设置</h3>
             <button class="settings-panel-close" @click="togglePanel('settings')">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <svg class="lucide lucide-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
             </button>
           </div>
           <div class="settings-panel-body">
             <div class="panel-settings-group">
               <label class="settings-label">
                 <span>同步滚动</span>
-                <div class="toggle-switch" :class="{ active: syncScrollEnabled }" @click="syncScrollEnabled = !syncScrollEnabled">
-                  <div class="toggle-knob"></div>
-                </div>
+                <div class="toggle-switch" :class="{ active: syncScrollEnabled }" @click="syncScrollEnabled = !syncScrollEnabled"></div>
+              </label>
+            </div>
+            <div class="panel-settings-group">
+              <label class="settings-label">
+                <span>显示代码语言</span>
+                <div class="toggle-switch" :class="{ active: codeBlockSettings.showLanguageLabel }" @click="codeBlockSettings.showLanguageLabel = !codeBlockSettings.showLanguageLabel"></div>
+              </label>
+              <label class="settings-label">
+                <span>显示复制按钮</span>
+                <div class="toggle-switch" :class="{ active: codeBlockSettings.showCopyButton }" @click="codeBlockSettings.showCopyButton = !codeBlockSettings.showCopyButton"></div>
+              </label>
+              <label class="settings-label">
+                <span>显示 macOS 装饰</span>
+                <div class="toggle-switch" :class="{ active: codeBlockSettings.showMacDecorations }" @click="codeBlockSettings.showMacDecorations = !codeBlockSettings.showMacDecorations"></div>
               </label>
             </div>
             <div class="panel-settings-group">
@@ -315,7 +321,6 @@
       </div>
     </transition>
 
-    <!-- Toast -->
     <transition name="toast-fade">
       <div v-if="toastState.show" class="toast-container">
         <div class="toast" :class="'toast-' + toastState.type">{{ toastState.message }}</div>
@@ -323,7 +328,6 @@
     </transition>
   </div>
 
-  <!-- 应用入口 -->
   <script type="module" src="assets/scripts/main.js"></script>
 </body>
 </html>

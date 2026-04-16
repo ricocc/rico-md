@@ -8,6 +8,13 @@ const KEY_STYLE = 'currentStyle';
 const KEY_CONTENT = 'markdownInput';
 const KEY_DOCUMENTS = 'documents';
 const KEY_ACTIVE_DOCUMENT_ID = 'activeDocumentId';
+const KEY_CODE_BLOCK_SETTINGS = 'codeBlockSettings';
+
+const DEFAULT_CODE_BLOCK_SETTINGS = {
+  showLanguageLabel: true,
+  showCopyButton: true,
+  showMacDecorations: true
+};
 
 let saveTimer = null;
 
@@ -21,93 +28,110 @@ function parseJSON(value, fallback) {
   }
 }
 
-function isValidDocument(doc) {
-  return !!doc
-    && typeof doc.id === 'string'
-    && typeof doc.title === 'string'
-    && typeof doc.content === 'string'
-    && typeof doc.createdAt === 'number'
-    && typeof doc.updatedAt === 'number';
+function normalizeDocument(doc, index = 0) {
+  if (!doc || typeof doc !== 'object') return null;
+  if (typeof doc.id !== 'string' || typeof doc.content !== 'string') return null;
+
+  const createdAt = typeof doc.createdAt === 'number' ? doc.createdAt : Date.now();
+  const updatedAt = typeof doc.updatedAt === 'number' ? doc.updatedAt : createdAt;
+
+  return {
+    id: doc.id,
+    title: typeof doc.title === 'string' ? doc.title : '',
+    manualTitle: typeof doc.manualTitle === 'string' ? doc.manualTitle : '',
+    content: doc.content,
+    createdAt,
+    updatedAt,
+    sortOrder: typeof doc.sortOrder === 'number' ? doc.sortOrder : index,
+    dirty: Boolean(doc.dirty)
+  };
 }
 
 function normalizeDocuments(documents) {
   if (!Array.isArray(documents)) return [];
-  return documents.filter(isValidDocument);
+  return documents.map((doc, index) => normalizeDocument(doc, index)).filter(Boolean);
+}
+
+function normalizeCodeBlockSettings(settings) {
+  if (!settings || typeof settings !== 'object') {
+    return { ...DEFAULT_CODE_BLOCK_SETTINGS };
+  }
+
+  return {
+    showLanguageLabel: settings.showLanguageLabel !== false,
+    showCopyButton: settings.showCopyButton !== false,
+    showMacDecorations: settings.showMacDecorations !== false
+  };
 }
 
 export function loadPreferences() {
   try {
-    const currentStyle = localStorage.getItem(KEY_STYLE) || 'wechat-default';
-    const content = localStorage.getItem(KEY_CONTENT);
-    const documents = normalizeDocuments(parseJSON(localStorage.getItem(KEY_DOCUMENTS), []));
-    const activeDocumentId = localStorage.getItem(KEY_ACTIVE_DOCUMENT_ID);
-
     return {
-      currentStyle,
-      content,
-      documents,
-      activeDocumentId
+      currentStyle: localStorage.getItem(KEY_STYLE) || 'wechat-default',
+      content: localStorage.getItem(KEY_CONTENT),
+      documents: normalizeDocuments(parseJSON(localStorage.getItem(KEY_DOCUMENTS), [])),
+      activeDocumentId: localStorage.getItem(KEY_ACTIVE_DOCUMENT_ID),
+      codeBlockSettings: normalizeCodeBlockSettings(parseJSON(localStorage.getItem(KEY_CODE_BLOCK_SETTINGS), null))
     };
   } catch (_error) {
     return {
       currentStyle: 'wechat-default',
       content: null,
       documents: [],
-      activeDocumentId: null
+      activeDocumentId: null,
+      codeBlockSettings: { ...DEFAULT_CODE_BLOCK_SETTINGS }
     };
   }
 }
 
-export function saveDocuments(documents, activeDocumentId) {
+export function savePreferences(currentStyle, content, documents = null, activeDocumentId = null, codeBlockSettings = null) {
   try {
-    localStorage.setItem(KEY_DOCUMENTS, JSON.stringify(documents));
+    localStorage.setItem(KEY_STYLE, currentStyle);
+    localStorage.setItem(KEY_CONTENT, content);
+
+    if (Array.isArray(documents)) {
+      localStorage.setItem(KEY_DOCUMENTS, JSON.stringify(documents));
+    }
 
     if (activeDocumentId) {
       localStorage.setItem(KEY_ACTIVE_DOCUMENT_ID, activeDocumentId);
     } else {
       localStorage.removeItem(KEY_ACTIVE_DOCUMENT_ID);
     }
-  } catch (_error) {
-    console.error('保存文档失败');
-  }
-}
 
-export function savePreferences(currentStyle, content, documents = null, activeDocumentId = null) {
-  try {
-    localStorage.setItem(KEY_STYLE, currentStyle);
-    localStorage.setItem(KEY_CONTENT, content);
-
-    if (Array.isArray(documents)) {
-      saveDocuments(documents, activeDocumentId);
+    if (codeBlockSettings) {
+      localStorage.setItem(KEY_CODE_BLOCK_SETTINGS, JSON.stringify(normalizeCodeBlockSettings(codeBlockSettings)));
     }
+
+    return true;
   } catch (_error) {
     console.error('保存偏好失败');
+    return false;
   }
 }
 
-export function debounceSaveContent(payload, delay = 1000) {
+export function debounceSaveContent(payload, delay = 1000, callbacks = {}) {
   if (saveTimer) clearTimeout(saveTimer);
 
   saveTimer = setTimeout(() => {
-    try {
-      if (typeof payload === 'string') {
-        localStorage.setItem(KEY_CONTENT, payload);
-        return;
-      }
+    const {
+      currentStyle = 'wechat-default',
+      content = '',
+      documents = null,
+      activeDocumentId = null,
+      codeBlockSettings = null
+    } = payload || {};
 
-      const {
-        content = '',
-        documents = null,
-        activeDocumentId = null
-      } = payload || {};
+    const success = savePreferences(currentStyle, content, documents, activeDocumentId, codeBlockSettings);
 
-      localStorage.setItem(KEY_CONTENT, content);
-
-      if (Array.isArray(documents)) {
-        saveDocuments(documents, activeDocumentId);
-      }
-    } catch (_error) {
-      console.error('自动保存失败');
+    if (success) {
+      callbacks.onSuccess?.(payload);
+    } else {
+      callbacks.onError?.(payload);
     }
   }, delay);
+}
+
+export function getDefaultCodeBlockSettings() {
+  return { ...DEFAULT_CODE_BLOCK_SETTINGS };
 }

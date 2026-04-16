@@ -1,24 +1,25 @@
 /**
- * 应用入口 - 创建 Vue 应用，组装所有模块
+ * Application entrypoint.
  * @module main
  */
 
 import { ImageStore } from './core/image-store.js';
 import { ImageCompressor } from './core/image-compressor.js';
 import { createMarkdownEngine } from './core/markdown-engine.js';
-import { createTurndownService, createPasteHandler, isMarkdown, isIDEFormattedHTML } from './core/paste-handler.js';
+import { createTurndownService, createPasteHandler } from './core/paste-handler.js';
 import { renderPipeline } from './core/render-pipeline.js';
 import { copyToWechat } from './export/clipboard-exporter.js';
-import { getCategorizedThemes, getStyle, getStyleName, isRecommended, getStarredStyles, toggleStarStyle } from './ui/theme-manager.js';
+import { getCategorizedThemes, getStyleName, isRecommended, getStarredStyles, toggleStarStyle } from './ui/theme-manager.js';
 import { getCodeTheme, getCodeThemeList, DEFAULT_CODE_THEME } from './ui/code-themes.js';
 import { createToast } from './ui/toast.js';
 import { createPanelManager } from './ui/panel-manager.js';
-import { loadPreferences, savePreferences, debounceSaveContent } from './storage/preferences.js';
+import { loadPreferences, savePreferences, debounceSaveContent, getDefaultCodeBlockSettings } from './storage/preferences.js';
 import { STYLES } from '../styles/themes/index.js';
 
-const { createApp, ref, watch, nextTick, onMounted } = window.Vue;
+const { createApp, ref, watch, nextTick, onMounted, computed } = window.Vue;
 
-// ── 状态 ──
+const UNTITLED_PREFIX = '未命名文档';
+
 const markdownInput = ref('');
 const renderedContent = ref('');
 const currentStyle = ref('wechat-default');
@@ -26,115 +27,65 @@ const starredStyles = ref([]);
 const currentCodeTheme = ref(DEFAULT_CODE_THEME);
 const documents = ref([]);
 const activeDocumentId = ref(null);
-const previewMode = ref('desktop'); // 'desktop' | 'mobile'
+const currentDocumentTitle = ref('');
+const documentSearch = ref('');
+const previewMode = ref('desktop');
 const isDraggingOver = ref(false);
 const copySuccess = ref(false);
 
-// ── 面板 & Toast ──
 const activePanel = ref(null);
 const toastState = ref({ show: false, message: '', type: 'success' });
 const sidebarOpen = ref(false);
 
-// ── 统计 ──
 const wordCount = ref(0);
 const charCount = ref(0);
 const readTime = ref(0);
-const lastUpdateTime = ref('--:--:--');
+const lastSavedTime = ref('--');
+const currentSaveState = ref('saved');
 
-// 面板宽度状态
-const editorWidth = ref(null);  // 编辑器宽度 (percentage)
-const rightPanelWidth = ref(null);  // 右侧面板宽度 (px)
+const editorWidth = ref(null);
+const rightPanelWidth = ref(null);
+const syncScrollEnabled = ref(true);
+const codeBlockSettings = ref(getDefaultCodeBlockSettings());
+const editorSelection = ref({ start: 0, end: 0 });
 
+const categorizedThemes = ref(getCategorizedThemes());
+const codeThemeList = getCodeThemeList();
+
+const toast = createToast(() => { toastState.value = toast.getState(); });
 const panelManager = createPanelManager(() => { activePanel.value = panelManager.getActivePanel(); });
 
-// ── 分割线拖拽功能 ──
-let resizeState = {
-  handle: null,
-  startX: 0,
-  startEditorWidth: 0,
-  startRightWidth: 0,
-  type: null // 'editor-preview' | 'preview-right'
-};
-
-function initResizeHandles() {
-  document.addEventListener('mousedown', (e) => {
-    const handle = e.target.closest('.resize-handle');
-    if (!handle) return;
-    
-    const type = handle.dataset.handle;
-    if (!type) return;
-    
-    resizeState.handle = handle;
-    resizeState.startX = e.clientX;
-    resizeState.type = type;
-    handle.classList.add('dragging');
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-    
-    // 记录初始宽度
-    const editorPanel = document.querySelector('.editor-panel');
-    const rightPanel = document.querySelector('.right-panel');
-    
-    if (type === 'editor-preview') {
-      resizeState.startEditorWidth = editorPanel?.offsetWidth || 0;
-    } else if (type === 'preview-right' && rightPanel) {
-      resizeState.startRightWidth = rightPanel.offsetWidth;
-    }
-  });
-  
-  document.addEventListener('mousemove', (e) => {
-    if (!resizeState.handle) return;
-    
-    const delta = e.clientX - resizeState.startX;
-    const editorPanel = document.querySelector('.editor-panel');
-    const rightPanel = document.querySelector('.right-panel');
-    const mainArea = document.querySelector('.main-area');
-    
-    if (!mainArea) return;
-    
-    const mainWidth = mainArea.offsetWidth;
-    
-    if (resizeState.type === 'editor-preview' && editorPanel) {
-      const newWidth = resizeState.startEditorWidth + delta;
-      const minWidth = 200;
-      const maxWidth = mainWidth * 0.6;
-      const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
-      editorWidth.value = (clampedWidth / mainWidth * 100).toFixed(2);
-    } else if (resizeState.type === 'preview-right' && rightPanel) {
-      const newWidth = resizeState.startRightWidth + delta;
-      const minWidth = 280;
-      const maxWidth = 500;
-      const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
-      rightPanelWidth.value = clampedWidth;
-    }
-  });
-  
-  document.addEventListener('mouseup', () => {
-    if (resizeState.handle) {
-      resizeState.handle.classList.remove('dragging');
-      resizeState.handle = null;
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    }
-  });
-}
-const toast = createToast(() => { toastState.value = toast.getState(); });
-
-// ── 服务实例 ──
 let md = null;
 let imageStore = null;
 let imageCompressor = null;
 let turndownService = null;
-let syncScrollEnabled = ref(true);
+let pasteHandler = null;
+let suppressEditorSync = false;
+let suppressTitleSync = false;
+let syncLock = false;
 
-// ── 分类主题列表 ──
-const categorizedThemes = ref(getCategorizedThemes());
-const codeThemeList = getCodeThemeList();
-let suppressDocumentSync = false;
-const UNTITLED_PREFIX = '\u672A\u547D\u540D\u6587\u6863';
+const filteredDocuments = computed(() => {
+  const keyword = documentSearch.value.trim().toLowerCase();
 
-function createDocumentId() {
-  return `doc-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+  return [...documents.value]
+    .filter((doc) => {
+      if (!keyword) return true;
+      const haystack = [
+        doc.manualTitle,
+        extractMarkdownTitle(doc.content),
+        doc.content
+      ].join('\n').toLowerCase();
+      return haystack.includes(keyword);
+    })
+    .sort((a, b) => {
+      if (b.updatedAt !== a.updatedAt) return b.updatedAt - a.updatedAt;
+      if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
+      return a.createdAt - b.createdAt;
+    });
+});
+
+function createDocumentId(prefix = 'doc') {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
 function extractMarkdownTitle(content) {
@@ -142,8 +93,54 @@ function extractMarkdownTitle(content) {
   return match ? match[1].trim() : '';
 }
 
+function getUntitledIndex(list = documents.value) {
+  let maxIndex = 0;
+  const pattern = new RegExp(`^${UNTITLED_PREFIX}\\s+(\\d+)$`);
+
+  list.forEach((doc) => {
+    const displayTitle = (doc.manualTitle || doc.title || '').trim();
+    const match = displayTitle.match(pattern);
+    if (match) {
+      maxIndex = Math.max(maxIndex, Number(match[1]));
+    }
+  });
+
+  return maxIndex + 1;
+}
+
+function getUntitledTitle(list = documents.value) {
+  return `${UNTITLED_PREFIX} ${getUntitledIndex(list)}`;
+}
+
+function buildDocument({
+  id = createDocumentId(),
+  manualTitle = '',
+  title = '',
+  content = '',
+  createdAt = Date.now(),
+  updatedAt = createdAt,
+  sortOrder = documents.value.length,
+  dirty = false
+} = {}) {
+  return {
+    id,
+    manualTitle,
+    title,
+    content,
+    createdAt,
+    updatedAt,
+    sortOrder,
+    dirty
+  };
+}
+
 function getActiveDocument() {
   return documents.value.find((doc) => doc.id === activeDocumentId.value) || null;
+}
+
+function resolveDocumentDisplayTitle(doc) {
+  if (!doc) return UNTITLED_PREFIX;
+  return doc.manualTitle?.trim() || extractMarkdownTitle(doc.content) || doc.title?.trim() || UNTITLED_PREFIX;
 }
 
 function sanitizeFilename(name) {
@@ -157,8 +154,8 @@ function sanitizeFilename(name) {
 function formatDateTime(timestamp) {
   if (!timestamp) return '--';
   const date = new Date(timestamp);
-  const now = new Date();
-  const sameDay = date.toDateString() === now.toDateString();
+  const today = new Date();
+  const sameDay = date.toDateString() === today.toDateString();
 
   if (sameDay) {
     return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false });
@@ -171,8 +168,8 @@ function formatDateTime(timestamp) {
   })}`;
 }
 
-function formatStatusDateTime(timestamp) {
-  if (!timestamp) return '--:--:--';
+function formatFullDateTime(timestamp) {
+  if (!timestamp) return '--';
   const date = new Date(timestamp);
   return `${date.toLocaleDateString('zh-CN')} ${date.toLocaleTimeString('zh-CN', {
     hour: '2-digit',
@@ -182,84 +179,82 @@ function formatStatusDateTime(timestamp) {
   })}`;
 }
 
-function syncLastUpdateTime() {
-  const activeDoc = getActiveDocument();
-  lastUpdateTime.value = formatStatusDateTime(activeDoc?.updatedAt);
+function getSaveStateLabel() {
+  return {
+    saving: '保存中',
+    saved: '已保存',
+    error: '保存失败'
+  }[currentSaveState.value];
+}
+
+function getSaveStateClass() {
+  return `status-${currentSaveState.value}`;
 }
 
 function syncEditorFromActiveDocument() {
   const activeDoc = getActiveDocument();
-  suppressDocumentSync = true;
+  suppressEditorSync = true;
+  suppressTitleSync = true;
   markdownInput.value = activeDoc ? activeDoc.content : '';
-  syncLastUpdateTime();
+  currentDocumentTitle.value = activeDoc ? (activeDoc.manualTitle || '') : '';
+  editorSelection.value = { start: 0, end: 0 };
+  updateStats();
 }
 
-function persistDocumentState() {
+function markCurrentDocumentDirty() {
   const activeDoc = getActiveDocument();
-  savePreferences(
-    currentStyle.value,
-    activeDoc ? activeDoc.content : markdownInput.value,
-    documents.value,
-    activeDocumentId.value
-  );
+  if (!activeDoc) return;
+  activeDoc.updatedAt = Date.now();
+  activeDoc.dirty = true;
+  currentSaveState.value = 'saving';
 }
 
-function schedulePersistDocumentState() {
+function buildSavePayload() {
   const activeDoc = getActiveDocument();
-  debounceSaveContent({
+  return {
+    currentStyle: currentStyle.value,
     content: activeDoc ? activeDoc.content : markdownInput.value,
     documents: documents.value,
-    activeDocumentId: activeDocumentId.value
-  });
-}
-
-function switchDocument(documentId) {
-  if (!documentId || documentId === activeDocumentId.value) return;
-  persistDocumentState();
-  activeDocumentId.value = documentId;
-  syncEditorFromActiveDocument();
-}
-
-function createNewDocument(content = '', title = '') {
-  const doc = buildDocument({ content, title });
-  documents.value.push(doc);
-  activeDocumentId.value = doc.id;
-  syncEditorFromActiveDocument();
-  persistDocumentState();
-  return doc;
-}
-
-function getUntitledTitle(index = getUntitledDocumentIndex()) {
-  return `${UNTITLED_PREFIX} ${index}`;
-}
-
-function getUntitledDocumentIndex(list = documents.value) {
-  let maxIndex = 0;
-  const pattern = new RegExp(`^${UNTITLED_PREFIX}\\s+(\\d+)$`);
-
-  list.forEach((doc) => {
-    const match = (doc.title || '').match(pattern);
-    if (match) {
-      maxIndex = Math.max(maxIndex, Number(match[1]));
-    }
-  });
-
-  return maxIndex + 1;
-}
-
-function buildDocument({ content = '', title = '', createdAt = Date.now(), updatedAt = createdAt } = {}) {
-  return {
-    id: createDocumentId(),
-    title: title || getUntitledTitle(),
-    content,
-    createdAt,
-    updatedAt
+    activeDocumentId: activeDocumentId.value,
+    codeBlockSettings: codeBlockSettings.value
   };
 }
 
-function resolveDocumentDisplayTitle(doc) {
-  if (!doc) return UNTITLED_PREFIX;
-  return extractMarkdownTitle(doc.content) || doc.title || UNTITLED_PREFIX;
+function handleSaveSuccess(payload = null) {
+  const documentId = payload?.activeDocumentId || activeDocumentId.value;
+  const savedDoc = documents.value.find((doc) => doc.id === documentId);
+  if (savedDoc) savedDoc.dirty = false;
+  currentSaveState.value = 'saved';
+  lastSavedTime.value = formatFullDateTime(Date.now());
+}
+
+function handleSaveError() {
+  currentSaveState.value = 'error';
+}
+
+function persistDocumentState() {
+  const success = savePreferences(
+    currentStyle.value,
+    getActiveDocument()?.content || markdownInput.value,
+    documents.value,
+    activeDocumentId.value,
+    codeBlockSettings.value
+  );
+
+  if (success) {
+    handleSaveSuccess();
+  } else {
+    handleSaveError();
+  }
+
+  return success;
+}
+
+function schedulePersistDocumentState() {
+  debounceSaveContent(buildSavePayload(), 800, {
+    onSuccess: handleSaveSuccess,
+    onError: handleSaveError
+  });
 }
 
 function updateStats() {
@@ -271,24 +266,14 @@ function updateStats() {
     return;
   }
 
-  // 字符数
   charCount.value = text.length;
-
-  // 中文字数 + 英文词数
   const chineseChars = (text.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g) || []).length;
-  const englishWords = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf]/g, ' ')
-    .split(/\s+/)
-    .filter((w) => w.length > 0)
-    .length;
+  const englishWords = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf]/g, ' ').split(/\s+/).filter(Boolean).length;
   const total = chineseChars + englishWords;
-
   wordCount.value = total;
   readTime.value = Math.max(1, Math.ceil(total / 300));
-
-  // 更新时间戳
 }
 
-// ── 渲染 ──
 async function renderMarkdown() {
   if (!markdownInput.value.trim()) {
     renderedContent.value = '';
@@ -305,19 +290,133 @@ async function renderMarkdown() {
       md,
       imageStore,
       styleConfig,
-      codeTheme: getCodeTheme(currentCodeTheme.value)
+      codeTheme: getCodeTheme(currentCodeTheme.value),
+      codeBlockSettings: codeBlockSettings.value
     });
   } catch (error) {
     console.error('渲染失败:', error);
   }
 }
 
-// ── 图片上传 ──
+function sortDocumentsByCurrentOrder() {
+  documents.value.forEach((doc, index) => {
+    doc.sortOrder = index;
+  });
+}
+
+function ensureActiveDocument() {
+  if (documents.value.length === 0) {
+    const doc = buildDocument({ title: getUntitledTitle([]), content: loadDefaultExample() });
+    documents.value = [doc];
+    activeDocumentId.value = doc.id;
+  }
+
+  if (!documents.value.some((doc) => doc.id === activeDocumentId.value)) {
+    activeDocumentId.value = documents.value[0]?.id || null;
+  }
+}
+
+function switchDocument(documentId) {
+  if (!documentId || documentId === activeDocumentId.value) return;
+  persistDocumentState();
+  activeDocumentId.value = documentId;
+  syncEditorFromActiveDocument();
+  renderMarkdown();
+}
+
+function createNewDocument(content = '', manualTitle = '') {
+  const doc = buildDocument({
+    manualTitle,
+    title: manualTitle || getUntitledTitle(),
+    content,
+    sortOrder: documents.value.length
+  });
+
+  documents.value.push(doc);
+  sortDocumentsByCurrentOrder();
+  activeDocumentId.value = doc.id;
+  syncEditorFromActiveDocument();
+  persistDocumentState();
+  return doc;
+}
+
+function renameDocument(documentId) {
+  if (documentId !== activeDocumentId.value) {
+    switchDocument(documentId);
+  }
+
+  nextTick(() => {
+    const input = document.querySelector('.document-title-input');
+    input?.focus();
+    input?.select();
+  });
+}
+
+function duplicateDocument(documentId) {
+  const source = documents.value.find((doc) => doc.id === documentId);
+  if (!source) return;
+
+  const duplicateTitle = `${resolveDocumentDisplayTitle(source)} 副本`;
+  const doc = buildDocument({
+    manualTitle: duplicateTitle,
+    title: duplicateTitle,
+    content: source.content,
+    sortOrder: documents.value.length
+  });
+
+  documents.value.push(doc);
+  sortDocumentsByCurrentOrder();
+  activeDocumentId.value = doc.id;
+  syncEditorFromActiveDocument();
+  persistDocumentState();
+}
+
+function deleteDocument(documentId) {
+  if (documents.value.length <= 1) {
+    toast.show('至少保留一个文档', 'error');
+    return;
+  }
+
+  const target = documents.value.find((doc) => doc.id === documentId);
+  if (!target) return;
+  if (!window.confirm(`确定删除“${resolveDocumentDisplayTitle(target)}”吗？`)) return;
+
+  const sorted = filteredDocuments.value;
+  const currentIndex = sorted.findIndex((doc) => doc.id === documentId);
+  const nextCandidate = sorted[currentIndex + 1] || sorted[currentIndex - 1] || documents.value.find((doc) => doc.id !== documentId);
+
+  documents.value = documents.value.filter((doc) => doc.id !== documentId);
+  sortDocumentsByCurrentOrder();
+  activeDocumentId.value = nextCandidate?.id || documents.value[0]?.id || null;
+  syncEditorFromActiveDocument();
+  persistDocumentState();
+}
+
+function moveDocument(documentId, direction) {
+  const ordered = filteredDocuments.value;
+  const index = ordered.findIndex((doc) => doc.id === documentId);
+  if (index < 0) return;
+
+  const swapIndex = direction === 'up' ? index - 1 : index + 1;
+  if (swapIndex < 0 || swapIndex >= ordered.length) return;
+
+  const currentDoc = ordered[index];
+  const swapDoc = ordered[swapIndex];
+
+  const currentOrder = currentDoc.sortOrder;
+  currentDoc.sortOrder = swapDoc.sortOrder;
+  swapDoc.sortOrder = currentOrder;
+
+  documents.value = [...documents.value];
+  persistDocumentState();
+}
+
 async function handleImageUpload(file, textarea) {
   if (!file.type.startsWith('image/')) {
     toast.show('请上传图片文件', 'error');
     return;
   }
+
   if (file.size > 10 * 1024 * 1024) {
     toast.show('图片大小不能超过 10MB', 'error');
     return;
@@ -328,12 +427,10 @@ async function handleImageUpload(file, textarea) {
 
   try {
     toast.show('正在压缩图片...', 'success');
-
     const compressedBlob = await imageCompressor.compress(file);
     const compressedSize = compressedBlob.size;
     const compressionRatio = ((1 - compressedSize / originalSize) * 100).toFixed(0);
-
-    const imageId = `img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const imageId = createDocumentId('img');
 
     await imageStore.saveImage(imageId, compressedBlob, {
       name: imageName,
@@ -345,21 +442,10 @@ async function handleImageUpload(file, textarea) {
     });
 
     const markdownImage = `![${imageName}](img://${imageId})`;
-
-    if (textarea) {
-      const currentPos = textarea.selectionStart;
-      const before = markdownInput.value.substring(0, currentPos);
-      const after = markdownInput.value.substring(currentPos);
-      markdownInput.value = before + markdownImage + after;
-
-      nextTick(() => {
-        const newPos = currentPos + markdownImage.length;
-        textarea.selectionStart = textarea.selectionEnd = newPos;
-        textarea.focus();
-      });
-    } else {
-      markdownInput.value += '\n' + markdownImage;
-    }
+    insertAtCursor(markdownImage, {
+      textarea,
+      selectionStart: markdownImage.length
+    });
 
     if (compressionRatio > 10) {
       toast.show(`已保存 (${ImageCompressor.formatSize(originalSize)} → ${ImageCompressor.formatSize(compressedSize)})`, 'success');
@@ -368,21 +454,18 @@ async function handleImageUpload(file, textarea) {
     }
   } catch (error) {
     console.error('图片处理失败:', error);
-    toast.show('图片处理失败: ' + error.message, 'error');
+    toast.show(`图片处理失败: ${error.message}`, 'error');
   }
 }
-
-// ── 粘贴 ──
-let pasteHandler = null;
 
 function initPasteHandler() {
   turndownService = createTurndownService();
   pasteHandler = createPasteHandler({
     turndownService,
     handleImageUpload,
-    showToast: (msg, type) => toast.show(msg, type),
+    showToast: (message, type) => toast.show(message, type),
     getInput: () => markdownInput.value,
-    setInput: (val) => { markdownInput.value = val; },
+    setInput: (value) => { markdownInput.value = value; },
     nextTick
   });
 }
@@ -393,20 +476,18 @@ async function onPaste(event) {
   }
 }
 
-// ── 拖拽 ──
 function handleDrop(event) {
   event.preventDefault();
   event.stopPropagation();
   isDraggingOver.value = false;
 
-  const files = event.dataTransfer.files;
-  if (files.length > 0) {
-    const file = files[0];
-    if (file.type.startsWith('image/')) {
-      handleImageUpload(file, event.target);
-    } else {
-      toast.show('只支持拖拽图片文件', 'error');
-    }
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+
+  if (file.type.startsWith('image/')) {
+    handleImageUpload(file, event.target);
+  } else {
+    toast.show('仅支持拖拽图片文件', 'error');
   }
 }
 
@@ -429,32 +510,29 @@ function handleDragLeave(event) {
   }
 }
 
-// ── 文件导入 ──
 function handleFileUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
 
   const reader = new FileReader();
-  reader.onload = (e) => {
-    const content = e.target.result || '';
+  reader.onload = (loadEvent) => {
+    const content = loadEvent.target.result || '';
     const fileTitle = file.name.replace(/\.(md|markdown)$/i, '');
-    const title = extractMarkdownTitle(content) || fileTitle || getUntitledTitle();
-    createNewDocument(content, title);
+    createNewDocument(content, fileTitle);
   };
-  reader.onerror = () => { toast.show('文件读取失败', 'error'); };
+  reader.onerror = () => toast.show('文件读取失败', 'error');
   reader.readAsText(file);
   event.target.value = '';
 }
 
-// ── 导出 ──
 function exportMarkdown() {
   const activeDoc = getActiveDocument();
   const blob = new Blob([markdownInput.value], { type: 'text/markdown' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${sanitizeFilename(resolveDocumentDisplayTitle(activeDoc))}.md`;
-  a.click();
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${sanitizeFilename(resolveDocumentDisplayTitle(activeDoc))}.md`;
+  link.click();
   URL.revokeObjectURL(url);
   toast.show('已导出 Markdown', 'success');
 }
@@ -463,37 +541,38 @@ function exportHTML() {
   const activeDoc = getActiveDocument();
   const blob = new Blob([renderedContent.value], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${sanitizeFilename(resolveDocumentDisplayTitle(activeDoc))}.html`;
-  a.click();
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${sanitizeFilename(resolveDocumentDisplayTitle(activeDoc))}.html`;
+  link.click();
   URL.revokeObjectURL(url);
   toast.show('已导出 HTML', 'success');
 }
 
-// ── 复制到公众号 ──
 async function doCopy() {
   const styleConfig = STYLES[currentStyle.value];
   const success = await copyToWechat({
     renderedHTML: renderedContent.value,
     styleConfig,
     imageStore,
-    showToast: (msg, type) => toast.show(msg, type)
+    showToast: (message, type) => toast.show(message, type),
+    codeTheme: getCodeTheme(currentCodeTheme.value),
+    codeBlockSettings: codeBlockSettings.value
   });
+
   if (success) {
     copySuccess.value = true;
     setTimeout(() => { copySuccess.value = false; }, 2000);
   }
 }
 
-// ── 复制到 X (Twitter) ──
 function copyToTwitter() {
   if (!renderedContent.value) return;
-  
+
   const parser = new DOMParser();
   const doc = parser.parseFromString(renderedContent.value, 'text/html');
   const text = doc.body.textContent || '';
-  
+
   navigator.clipboard.writeText(text).then(() => {
     toast.show('已复制纯文本，可粘贴到 X', 'success');
   }).catch(() => {
@@ -501,10 +580,8 @@ function copyToTwitter() {
   });
 }
 
-// ── 主题 ──
 function selectTheme(key) {
   currentStyle.value = key;
-  // 不自动收起面板
 }
 
 function toggleStar(key) {
@@ -515,34 +592,157 @@ function toggleStar(key) {
 
 function selectCodeTheme(key) {
   currentCodeTheme.value = key;
-  try { localStorage.setItem('currentCodeTheme', key); } catch (_e) {}
+  try {
+    localStorage.setItem('currentCodeTheme', key);
+  } catch (_error) {
+    // ignore
+  }
   renderMarkdown();
 }
 
-// ── 快捷键 ──
+function getTextarea() {
+  return document.querySelector('.markdown-input');
+}
+
+function syncEditorSelection(event) {
+  const textarea = event?.target || getTextarea();
+  if (!textarea) return;
+
+  editorSelection.value = {
+    start: textarea.selectionStart ?? 0,
+    end: textarea.selectionEnd ?? 0
+  };
+}
+
+function getEditorSelection(textarea = getTextarea()) {
+  if (!textarea) {
+    return {
+      start: editorSelection.value.start ?? 0,
+      end: editorSelection.value.end ?? 0
+    };
+  }
+
+  if (document.activeElement === textarea) {
+    syncEditorSelection({ target: textarea });
+  }
+
+  return {
+    start: editorSelection.value.start ?? 0,
+    end: editorSelection.value.end ?? 0
+  };
+}
+
+function insertAtCursor(text, options = {}) {
+  const textarea = options.textarea || getTextarea();
+  const { start, end } = getEditorSelection(textarea);
+  const before = markdownInput.value.slice(0, start);
+  const after = markdownInput.value.slice(end);
+
+  markdownInput.value = `${before}${text}${after}`;
+
+  nextTick(() => {
+    const target = textarea || getTextarea();
+    if (!target) return;
+
+    const position = start + (options.selectionStart ?? text.length);
+    const selectionEnd = options.selectionEnd != null ? start + options.selectionEnd : position;
+    target.focus();
+    target.selectionStart = position;
+    target.selectionEnd = selectionEnd;
+    syncEditorSelection({ target });
+  });
+}
+
+function wrapSelection(before, after, placeholder = '文本') {
+  const textarea = getTextarea();
+  const { start, end } = getEditorSelection(textarea);
+  const selected = markdownInput.value.substring(start, end) || placeholder;
+  const text = `${before}${selected}${after}`;
+
+  markdownInput.value = `${markdownInput.value.substring(0, start)}${text}${markdownInput.value.substring(end)}`;
+
+  nextTick(() => {
+    if (!textarea) return;
+    textarea.focus();
+    textarea.selectionStart = start + before.length;
+    textarea.selectionEnd = start + before.length + selected.length;
+    syncEditorSelection({ target: textarea });
+  });
+}
+
+function insertHeading(level) {
+  insertAtCursor(`${'#'.repeat(level)} `);
+}
+
+function insertQuote() {
+  insertAtCursor('> ');
+}
+
+function insertDivider() {
+  insertAtCursor('\n---\n');
+}
+
+function insertCodeBlock() {
+  const textarea = getTextarea();
+  const { start, end } = getEditorSelection(textarea);
+  const selected = markdownInput.value.substring(start, end);
+  const snippet = `\`\`\`\n${selected}\n\`\`\``;
+
+  markdownInput.value = `${markdownInput.value.substring(0, start)}${snippet}${markdownInput.value.substring(end)}`;
+
+  nextTick(() => {
+    if (!textarea) return;
+    textarea.focus();
+    if (selected) {
+      textarea.selectionStart = start + 4;
+      textarea.selectionEnd = start + 4 + selected.length;
+    } else {
+      textarea.selectionStart = start + 4;
+      textarea.selectionEnd = start + 4;
+    }
+    syncEditorSelection({ target: textarea });
+  });
+}
+
+function insertImageSyntax() {
+  insertAtCursor('![]()', { selectionStart: 4 });
+}
+
+function insertTable() {
+  const table = '\n| 列 1 | 列 2 | 列 3 |\n| --- | --- | --- |\n| 内容 | 内容 | 内容 |\n';
+  insertAtCursor(table);
+}
+
+function handleToolbarImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  handleImageUpload(file, getTextarea());
+  event.target.value = '';
+}
+
 function handleKeydown(event) {
   const isMod = event.ctrlKey || event.metaKey;
 
-  if (isMod && event.key === 's') {
+  if (isMod && event.key.toLowerCase() === 's') {
     event.preventDefault();
     persistDocumentState();
     toast.show('已保存', 'success');
     return;
   }
 
-  if (isMod && event.key === 'b') {
+  if (isMod && event.key.toLowerCase() === 'b') {
     event.preventDefault();
     wrapSelection('**', '**');
     return;
   }
 
-  if (isMod && event.key === 'i') {
+  if (isMod && event.key.toLowerCase() === 'i') {
     event.preventDefault();
     wrapSelection('*', '*');
     return;
   }
 
-  if (isMod && event.key === 'k') {
+  if (isMod && event.key.toLowerCase() === 'k') {
     event.preventDefault();
     wrapSelection('[', '](url)');
     return;
@@ -550,83 +750,60 @@ function handleKeydown(event) {
 
   if (event.key === 'Tab') {
     event.preventDefault();
-    const textarea = event.target;
-    if (textarea.tagName === 'TEXTAREA') {
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      markdownInput.value = markdownInput.value.substring(0, start) + '  ' + markdownInput.value.substring(end);
-      nextTick(() => { textarea.selectionStart = textarea.selectionEnd = start + 2; });
-    }
+    insertAtCursor('  ');
   }
 }
 
-function wrapSelection(before, after) {
-  const textarea = document.querySelector('.markdown-input');
-  if (!textarea) return;
-
-  const start = textarea.selectionStart;
-  const end = textarea.selectionEnd;
-  const selected = markdownInput.value.substring(start, end);
-  const newText = before + (selected || '文本') + after;
-
-  markdownInput.value = markdownInput.value.substring(0, start) + newText + markdownInput.value.substring(end);
-
-  nextTick(() => {
-    if (selected) {
-      textarea.selectionStart = start + before.length;
-      textarea.selectionEnd = start + before.length + selected.length;
-    } else {
-      textarea.selectionStart = start + before.length;
-      textarea.selectionEnd = start + before.length + 2;
-    }
-    textarea.focus();
-  });
-}
-
-// ── 同步滚动 ──
-let _syncLock = false;
-
 function setupSyncScroll() {
-  const editor = document.querySelector('.markdown-input');
+  const editor = getTextarea();
   const preview = document.querySelector('.preview-content');
   if (!editor || !preview) return;
 
   const sync = (source, target) => {
-    if (_syncLock || !syncScrollEnabled.value) return;
-    _syncLock = true;
-
+    if (syncLock || !syncScrollEnabled.value) return;
+    syncLock = true;
     const ratio = source.scrollTop / (source.scrollHeight - source.clientHeight || 1);
     target.scrollTop = ratio * (target.scrollHeight - target.clientHeight);
-
-    requestAnimationFrame(() => { _syncLock = false; });
+    requestAnimationFrame(() => { syncLock = false; });
   };
 
   editor.addEventListener('scroll', () => sync(editor, preview));
   preview.addEventListener('scroll', () => sync(preview, editor));
 }
 
-// ── 默认示例 ──
+function handlePreviewClick(event) {
+  const button = event.target.closest('[data-action="copy-code"]');
+  if (!button) return;
+
+  const block = button.closest('[data-code-block="true"]');
+  const code = block?.querySelector('.md-code-block-code')?.textContent || '';
+  if (!code) return;
+
+  navigator.clipboard.writeText(code).then(() => {
+    toast.show('代码已复制', 'success');
+  }).catch(() => {
+    toast.show('代码复制失败', 'error');
+  });
+}
+
 function loadDefaultExample() {
   return `![](https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1200&h=400&fit=crop)
 
 # 公众号 Markdown 编辑器
 
-欢迎使用这款专为**微信公众号**设计的 Markdown 编辑器！
+欢迎使用这款专为**微信公众号**设计的 Markdown 编辑器。
 
-## 🎯 核心功能
+## 核心能力
 
 ### 1. 智能图片处理
 
 ![](https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=800&h=500&fit=crop)
 
-- **粘贴即用**：支持从任何地方复制粘贴图片（截图、浏览器、文件管理器）
-- **自动压缩**：图片自动压缩，平均压缩 50%-80%
-- **本地存储**：使用 IndexedDB 持久化，刷新不丢失
-- **编辑流畅**：编辑器中使用短链接，告别卡顿
+- 支持截图、浏览器、文件管理器等来源的图片粘贴
+- 自动压缩并本地持久化保存
+- 刷新页面后图片不会丢失
 
-### 2. 多图排版展示
-
-支持朋友圈式的多图网格布局，2-3 列自动排版：
+### 2. 多图排版
 
 ![](https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop)
 
@@ -634,64 +811,87 @@ function loadDefaultExample() {
 
 ![](https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&h=400&fit=crop)
 
-### 3. 13 种精美样式
-
-1. **经典公众号系列**：默认、技术、优雅、深度阅读
-2. **传统媒体系列**：杂志、纽约时报、金融时报、Jony Ive
-3. **现代数字系列**：Wired、Medium、Apple、Claude、AI Coder
-
-### 4. 一键复制
-
-点击「复制到公众号」按钮，直接粘贴到公众号后台，格式完美保留！
-
-## 💻 代码示例
+### 3. 代码块示例
 
 \`\`\`javascript
-// 图片自动压缩并存储到 IndexedDB
 const compressedBlob = await imageCompressor.compress(file);
 await imageStore.saveImage(imageId, compressedBlob);
 
-// 编辑器中插入短链接
-const markdown = \`![图片](img::\${imageId})\`;
+const markdown = \`![图片](img://\${imageId})\`;
 \`\`\`
 
-## 📖 引用样式
-
-> 这是一段引用文字，展示编辑器的引用样式效果。
->
-> 不同的样式主题会有不同的引用样式，试试切换样式看看效果！
-
-## 📊 表格支持
-
-| 功能 | 支持情况 | 说明 |
-|------|---------|------|
-| 图片粘贴 | ✅ | 100% 成功率 |
-| 刷新保留 | ✅ | IndexedDB 存储 |
-| 样式主题 | ✅ | 13 种精选样式 |
-| 代码高亮 | ✅ | 多语言支持 |
-
----
-
-**💡 提示**：
-
-- 试着切换不同的样式主题，体验各种风格的排版效果
-- 粘贴图片试试智能压缩功能
-- 刷新页面看看内容是否保留
-
-**🌟 开源项目**：如果觉得有用，欢迎访问 [GitHub 仓库](https://github.com/ricocc/rico-md) 给个 Star！
+> 试试切换不同主题和代码块设置，观察预览变化。
 `;
 }
 
-// ── 创建应用 ──
+function initResizeHandles() {
+  const resizeState = {
+    handle: null,
+    startX: 0,
+    startEditorWidth: 0,
+    startRightWidth: 0,
+    type: null
+  };
+
+  document.addEventListener('mousedown', (event) => {
+    const handle = event.target.closest('.resize-handle');
+    if (!handle) return;
+
+    resizeState.handle = handle;
+    resizeState.startX = event.clientX;
+    resizeState.type = handle.dataset.handle;
+    handle.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    const editorPanel = document.querySelector('.editor-panel');
+    const rightPanel = document.querySelector('.right-panel');
+
+    if (resizeState.type === 'editor-preview') {
+      resizeState.startEditorWidth = editorPanel?.offsetWidth || 0;
+    } else if (resizeState.type === 'preview-right') {
+      resizeState.startRightWidth = rightPanel?.offsetWidth || 0;
+    }
+  });
+
+  document.addEventListener('mousemove', (event) => {
+    if (!resizeState.handle) return;
+
+    const mainArea = document.querySelector('.main-area');
+    const editorPanel = document.querySelector('.editor-panel');
+    const rightPanel = document.querySelector('.right-panel');
+    if (!mainArea) return;
+
+    const delta = event.clientX - resizeState.startX;
+    const mainWidth = mainArea.offsetWidth;
+
+    if (resizeState.type === 'editor-preview' && editorPanel) {
+      const newWidth = resizeState.startEditorWidth + delta;
+      const clampedWidth = Math.max(200, Math.min(mainWidth * 0.6, newWidth));
+      editorWidth.value = (clampedWidth / mainWidth * 100).toFixed(2);
+    } else if (resizeState.type === 'preview-right' && rightPanel) {
+      const newWidth = resizeState.startRightWidth + delta;
+      rightPanelWidth.value = Math.max(280, Math.min(500, newWidth));
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!resizeState.handle) return;
+    resizeState.handle.classList.remove('dragging');
+    resizeState.handle = null;
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+}
+
 const app = createApp({
   setup() {
-    // Watchers
     watch(markdownInput, (value) => {
       renderMarkdown();
       updateStats();
 
-      if (suppressDocumentSync) {
-        suppressDocumentSync = false;
+      if (suppressEditorSync) {
+        suppressEditorSync = false;
         return;
       }
 
@@ -699,8 +899,22 @@ const app = createApp({
       if (!activeDoc) return;
 
       activeDoc.content = value;
-      activeDoc.updatedAt = Date.now();
-      syncLastUpdateTime();
+      markCurrentDocumentDirty();
+      schedulePersistDocumentState();
+    });
+
+    watch(currentDocumentTitle, (value) => {
+      if (suppressTitleSync) {
+        suppressTitleSync = false;
+        return;
+      }
+
+      const activeDoc = getActiveDocument();
+      if (!activeDoc) return;
+
+      activeDoc.manualTitle = value;
+      activeDoc.title = value || activeDoc.title;
+      markCurrentDocumentDirty();
       schedulePersistDocumentState();
     });
 
@@ -709,62 +923,58 @@ const app = createApp({
       persistDocumentState();
     });
 
-    // 初始化
+    watch(codeBlockSettings, () => {
+      renderMarkdown();
+      persistDocumentState();
+    }, { deep: true });
+
     onMounted(async () => {
-      // 加载偏好
       starredStyles.value = getStarredStyles();
-      const prefs = loadPreferences();
-      currentStyle.value = prefs.currentStyle;
 
-      // 初始化分割线拖拽
-      initResizeHandles();
+      const preferences = loadPreferences();
+      currentStyle.value = preferences.currentStyle;
+      codeBlockSettings.value = preferences.codeBlockSettings;
 
-      // 代码主题
       try {
         const savedCodeTheme = localStorage.getItem('currentCodeTheme');
         if (savedCodeTheme && getCodeTheme(savedCodeTheme)) {
           currentCodeTheme.value = savedCodeTheme;
         }
-      } catch (_e) {}
-
-      // 初始化图片存储
-      imageStore = new ImageStore();
-      try { await imageStore.init(); } catch (e) { console.error('ImageStore 初始化失败:', e); }
-
-      imageCompressor = new ImageCompressor({ maxWidth: 1920, maxHeight: 1920, quality: 0.85 });
-
-      // 初始化 Markdown 引擎
-      md = createMarkdownEngine();
-
-      // 初始化粘贴处理
-      initPasteHandler();
-
-      // 加载内容
-      if (prefs.documents.length > 0) {
-        documents.value = prefs.documents;
-      } else if (prefs.content) {
-        documents.value = [buildDocument({ content: prefs.content, title: getUntitledTitle(getUntitledDocumentIndex([])) })];
-      } else {
-        documents.value = [buildDocument({ content: loadDefaultExample(), title: getUntitledTitle(getUntitledDocumentIndex([])) })];
+      } catch (_error) {
+        // ignore
       }
 
-      activeDocumentId.value = prefs.activeDocumentId && documents.value.some((doc) => doc.id === prefs.activeDocumentId)
-        ? prefs.activeDocumentId
-        : documents.value[0]?.id || null;
+      initResizeHandles();
 
+      imageStore = new ImageStore();
+      try {
+        await imageStore.init();
+      } catch (error) {
+        console.error('ImageStore 初始化失败:', error);
+      }
+
+      imageCompressor = new ImageCompressor({ maxWidth: 1920, maxHeight: 1920, quality: 0.85 });
+      md = createMarkdownEngine();
+      initPasteHandler();
+
+      if (preferences.documents.length > 0) {
+        documents.value = preferences.documents.map((doc, index) => buildDocument({ ...doc, sortOrder: doc.sortOrder ?? index }));
+      } else if (preferences.content) {
+        documents.value = [buildDocument({ content: preferences.content, title: getUntitledTitle([]), manualTitle: '' })];
+      } else {
+        documents.value = [buildDocument({ content: loadDefaultExample(), title: getUntitledTitle([]), manualTitle: '' })];
+      }
+
+      activeDocumentId.value = preferences.activeDocumentId;
+      ensureActiveDocument();
       syncEditorFromActiveDocument();
-      updateStats();
+      renderMarkdown();
       persistDocumentState();
 
-      // 初始渲染
-      renderMarkdown();
-
-      // 同步滚动
       nextTick(() => setupSyncScroll());
     });
 
     return {
-      // 状态
       markdownInput,
       renderedContent,
       currentStyle,
@@ -772,25 +982,27 @@ const app = createApp({
       currentCodeTheme,
       documents,
       activeDocumentId,
+      currentDocumentTitle,
+      documentSearch,
+      filteredDocuments,
       previewMode,
       isDraggingOver,
       copySuccess,
       activePanel,
       toastState,
-      syncScrollEnabled,
       sidebarOpen,
       wordCount,
       charCount,
       readTime,
-      lastUpdateTime,
-      // 面板宽度
+      lastSavedTime,
+      currentSaveState,
+      syncScrollEnabled,
       editorWidth,
       rightPanelWidth,
-      // 主题
       categorizedThemes,
       codeThemeList,
+      codeBlockSettings,
       STYLES,
-      // 方法
       renderMarkdown,
       doCopy,
       copyToTwitter,
@@ -800,19 +1012,35 @@ const app = createApp({
       handleDragEnter,
       handleDragLeave,
       handleFileUpload,
+      handleToolbarImageUpload,
       exportMarkdown,
       exportHTML,
       selectTheme,
       toggleStar,
       selectCodeTheme,
       handleKeydown,
+      syncEditorSelection,
+      insertHeading,
+      insertQuote,
+      insertCodeBlock,
+      insertDivider,
+      insertImageSyntax,
+      insertTable,
+      wrapSelection,
       getStyleName,
       isRecommended,
       getDocumentDisplayTitle: resolveDocumentDisplayTitle,
       formatDateTime,
       switchDocument,
-      togglePanel: (name) => panelManager.toggle(name),
-      clearEditor: () => { createNewDocument('', getUntitledTitle()); },
+      createNewDocument,
+      renameDocument,
+      duplicateDocument,
+      deleteDocument,
+      moveDocument,
+      handlePreviewClick,
+      getSaveStateLabel,
+      getSaveStateClass,
+      togglePanel: (name) => panelManager.toggle(name)
     };
   }
 });

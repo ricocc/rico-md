@@ -6,37 +6,104 @@
  */
 
 /* ── Markdown Input Container ── */
-.markdown-input-container {
+.editor-composer {
+  display: flex;
   flex: 1;
-  overflow: hidden;
+  min-height: 0;
+  flex-direction: column;
+  margin: var(--space-md);
   padding: var(--space-md);
-  background: var(--color-bg);
-}
-
-.markdown-input {
-  width: 100%;
-  height: 100%;
-  padding: var(--space-md);
+  gap: 12px;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.7;
-  resize: none;
-  background: var(--color-surface);
-  color: var(--color-primary);
-  transition: border-color var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
 
-.markdown-input:focus {
+.editor-composer:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.08);
+}
+
+.markdown-input-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  background: transparent;
+}
+
+.editor-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  background: transparent;
+  border-bottom: none;
+}
+
+.document-title-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+.document-title-input:focus {
   outline: none;
   border-color: var(--color-accent);
   box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.08);
 }
 
-.markdown-input.drag-over {
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 0;
+}
+
+.editor-tool-btn {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.editor-tool-btn:hover {
+  color: var(--color-primary);
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.12);
+}
+
+.markdown-input {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.7;
+  resize: none;
+  background: transparent;
+  color: var(--color-primary);
+  transition: background var(--transition-fast);
+}
+
+.markdown-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.markdown-input.drag-over {
+  background: rgba(0, 102, 255, 0.04);
 }
 
 .markdown-input::placeholder {
@@ -80,13 +147,15 @@
 }
 
 .device-toggle-btn svg { width: 14px; height: 14px; }
-.device-toggle-btn:hover { color: var(--color-primary); }
+.device-toggle-btn:hover { color: var(--color-primary); transform: translateY(-1px); }
 
 .device-toggle-btn.active {
   background: var(--color-surface);
   color: var(--color-accent);
   box-shadow: var(--shadow-sm);
 }
+
+.device-toggle-btn:active { transform: translateY(0); }
 
 /* ── Copy Button ── */
 .copy-btn {
@@ -95,7 +164,7 @@
   color: white;
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -144,6 +213,32 @@
   border-right: 1px solid var(--color-light-border);
 }
 
+.preview-container .md-code-block-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview-container .md-code-block-decorations {
+  display: flex;
+  gap: 6px;
+}
+
+.preview-container .md-code-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.preview-container .dot-red { background: #ff5f56; }
+.preview-container .dot-yellow { background: #ffbd2e; }
+.preview-container .dot-green { background: #27c93f; }
+
+.preview-container .md-code-block-copy:hover {
+  opacity: 0.85;
+}
+
 /* ── Empty State ── */
 .empty-state {
   display: flex;
@@ -170,12 +265,15 @@
 }
 
 .empty-state p {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-tertiary);
 }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
+  .editor-header { padding: var(--space-sm) var(--space-sm) 0; }
+  .editor-toolbar { gap: 6px; padding-bottom: var(--space-sm); }
+  .editor-tool-btn { font-size: 11px; padding: 5px 8px; }
   .markdown-input-container { padding: var(--space-sm); }
   .markdown-input { font-size: 13px; padding: var(--space-sm); }
   .preview-container { padding: 16px; }
