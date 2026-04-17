@@ -8,8 +8,8 @@ import { STYLES } from '../../styles/themes/index.js';
 /** 主题分类定义 */
 export const THEME_CATEGORIES = {
   '经典公众号': ['wechat-default', 'wechat-tech', 'wechat-elegant', 'wechat-deepread'],
+  '现代设计': ['wechat-anthropic', 'wired', 'wechat-medium', 'wechat-apple', 'ai-coder'],
   '传统媒体': ['latepost-depth', 'wechat-ft', 'wechat-nyt', 'magazine', 'wechat-jonyive'],
-  '现代数字': ['wechat-anthropic', 'wired', 'wechat-medium', 'wechat-apple', 'ai-coder'],
   '设计灵感': ['kenya-emptiness', 'hische-editorial', 'ando-concrete', 'gaudi-organic', 'guardian', 'nikkei', 'lemonde']
 };
 

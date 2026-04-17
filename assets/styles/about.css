@@ -154,14 +154,14 @@ body.about-page {
 .about-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
   color: #ffffff;
   background: var(--color-accent);
   border-radius: 999px;
-  padding: 8px 12px;
+  padding: 6px 16px;
   transition: background var(--transition-fast), transform var(--transition-fast);
 }
 

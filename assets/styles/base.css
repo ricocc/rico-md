@@ -3,7 +3,7 @@
  * --------
  * Foundation: CSS variables, resets, layout, header, sidebar,
  * status bar, toast, scrollbar, responsive.
- * 
+ *
  * Design Tokens from reflct.co DESIGN.md
  */
 
@@ -67,9 +67,7 @@
   --radius-xl: 40px;
   --radius-2xl: 9999px;
 
-  /* Legacy radius aliases */
-  --radius-sm: 5px;
-  --radius-md: 8px;
+
 
   /* ── Shadows ── */
   --shadow-1: 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
@@ -94,7 +92,7 @@
   --transition-normal: 250ms ease;
 
   /* ── Layout ── */
-  --header-height: 46px;
+  --header-height: 52px;
   --status-bar-height: 26px;
   --sidebar-width: 280px;
   --side-panel-width: 380px;
@@ -223,14 +221,14 @@ body {
 .header-nav-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 5px 10px;
+  gap: 6px;
+  padding: 6px 12px;
   background: transparent;
   border: none;
   border-radius: var(--radius-sm);
   color: var(--color-secondary);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -513,7 +511,7 @@ body {
   align-items: center;
   gap: 7px;
   width: 100%;
-  padding: 8px 8px;
+  padding: 10px 12px;
   border: none;
   background: transparent;
   border-radius: var(--radius-sm);
@@ -524,7 +522,7 @@ body {
   text-align: left;
 }
 .sidebar-action-btn:hover { background: var(--color-bg); color: var(--color-primary); transform: translateY(-1px); }
-.sidebar-action-btn.primary { background: var(--color-accent); color: white; font-weight: 500; }
+.sidebar-action-btn.primary { background: var(--color-accent); color: white; font-weight: 500;margin-top:8px; }
 .sidebar-action-btn.primary:hover { background: var(--color-accent-hover); }
 .sidebar-action-btn:active { transform: translateY(0); }
 .sidebar-action-btn svg { flex-shrink: 0; }

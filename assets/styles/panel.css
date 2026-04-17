@@ -2,7 +2,7 @@
  * panel.css
  * ---------
  * Right-side large panel overlay for theme/code/settings.
- * 
+ *
  * Design Tokens from reflct.co DESIGN.md
  */
 
@@ -124,7 +124,7 @@
   cursor: pointer;
   transition: all var(--motion-instant);
   position: relative;
-  min-height: 56px;
+  overflow: hidden;
 }
 
 .theme-card:hover {
@@ -140,7 +140,6 @@
 .theme-card.active {
   border-color: var(--color-accent);
   background: var(--color-accent-light);
-  box-shadow: 0 0 0 1px var(--color-accent), var(--shadow-2);
 }
 
 .theme-card-name {
@@ -149,7 +148,6 @@
   text-align: center;
   line-height: 1.3;
   font-weight: 500;
-  padding-right: var(--space-5);
 }
 
 .theme-card.active .theme-card-name {
@@ -208,13 +206,16 @@
 
 .theme-card-badge {
   position: absolute;
-  top: var(--space-1);
-  left: var(--space-1);
+  top: 0;
+  left: 0;
   font-size: 9px;
-  padding: 1px 5px;
+  padding: 2px 5px;
   background: var(--color-accent);
   color: white;
-  border-radius: 3px;
+  border-radius: 6px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
   line-height: 1.3;
   font-weight: 500;
 }
@@ -279,7 +280,7 @@
 
 .code-theme-card.active {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent), var(--shadow-2);
+  /* box-shadow: 0 0 0 1px var(--color-accent), var(--shadow-2); */
 }
 
 .code-theme-name {
@@ -290,7 +291,7 @@
 }
 
 .code-theme-desc {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
   text-align: center;
   line-height: 1.3;

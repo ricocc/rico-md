@@ -3,7 +3,7 @@
  * -----------
  * Editor panel, textarea, preview panel, preview toolbar,
  * preview container, empty state.
- * 
+ *
  * Design Tokens from reflct.co DESIGN.md
  */
 
@@ -51,7 +51,7 @@
   border: 1px solid var(--color-border-default);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-lg);
-  font-weight: 600;
+  font-weight: 400;
   background: var(--color-surface);
   color: var(--color-text-primary);
   transition: all var(--motion-fast);
@@ -135,7 +135,7 @@
 /* ── Device Toggle ── */
 .device-toggle {
   display: flex;
-  gap: 0;
+  gap: 4px;
   background: var(--color-surface-raised);
   border-radius: var(--radius-xs);
   padding: var(--space-1);
@@ -146,7 +146,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--space-8);
+  width: 26px;
   height: 26px;
   background: transparent;
   border: none;
@@ -156,7 +156,7 @@
   transition: all var(--motion-instant);
 }
 
-.device-toggle-btn svg { width: 14px; height: 14px; }
+.device-toggle-btn svg { width: 16px; height: 16px; }
 
 .device-toggle-btn:hover {
   color: var(--color-text-primary);
@@ -175,6 +175,10 @@
 
 /* ── Copy Button ── */
 .copy-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   padding: var(--space-3) var(--space-7);
   background: var(--color-accent);
   color: white;
@@ -240,7 +244,7 @@
 .preview-container {
   max-width: var(--preview-width-desktop);
   margin: 0 auto;
-  padding: var(--space-8) var(--space-8) var(--space-xl);
+  padding: var(--space-6) var(--space-6) var(--space-lg);
   background: var(--color-surface);
   min-height: 100%;
   border-radius: var(--radius-md);
