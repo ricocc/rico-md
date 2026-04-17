@@ -252,7 +252,7 @@ function persistDocumentState() {
 }
 
 function schedulePersistDocumentState() {
-  debounceSaveContent(buildSavePayload(), 800, {
+  debounceSaveContent(buildSavePayload(), 5000, {
     onSuccess: handleSaveSuccess,
     onError: handleSaveError
   });

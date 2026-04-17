@@ -175,7 +175,7 @@
 
 /* ── Copy Button ── */
 .copy-btn {
-  padding: var(--space-2) var(--space-7);
+  padding: var(--space-3) var(--space-7);
   background: var(--color-accent);
   color: white;
   border: none;

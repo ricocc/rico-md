@@ -329,6 +329,13 @@
   font-weight: 500;
 }
 
+.settings-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  line-height: 1.5;
+  padding-left: 2px;
+}
+
 .settings-shortcuts {
   display: flex;
   flex-direction: column;
