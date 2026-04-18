@@ -81,7 +81,10 @@
   cursor: pointer;
   transition: all var(--motion-instant);
 }
-
+.editor-tool-btn .lucide{
+  width: 16px;
+  height: 16px;
+}
 .editor-tool-btn:hover {
   color: var(--color-text-primary);
   border-color: var(--color-accent);

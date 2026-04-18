@@ -22,7 +22,7 @@ export const theme = {
     "li": "margin: 8px 0; line-height: 1.8 !important;",
     "blockquote": "margin: 16px 0; padding: 8px 16px; background-color: #fafafa !important; border-left: 3px solid #999; color: #666 !important; line-height: 1.5 !important;",
     "code": "font-family: Consolas, Monaco, \"Courier New\", monospace; font-size: 13px; padding: 2px 6px; background-color: #f5f5f5 !important; color: #e74c3c !important; border-radius: 3px;",
-    "pre": "margin: 20px 0; padding: 16px; background-color: #2d2d2d !important; border-radius: 8px; overflow-x: auto; line-height: 1.6 !important;",
+    "pre": "margin: 20px 0; padding: 16px; background-color: #2d2d2d !important;font-size: 13px; border-radius: 8px; overflow-x: auto; line-height: 1.6 !important;",
     "hr": "margin: 32px 0; border: none; border-top: 1px solid #e0e0e0;",
     "img": "max-width: 100%; max-height: 600px !important; height: auto; display: block; margin: 20px auto; border-radius: 8px;",
     "table": "width: 100%; margin: 20px 0; border-collapse: collapse; font-size: 15px;",

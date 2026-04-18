@@ -29,7 +29,7 @@ const documents = ref([]);
 const activeDocumentId = ref(null);
 const currentDocumentTitle = ref('');
 const documentSearch = ref('');
-const previewMode = ref('desktop');
+const previewMode = ref('mobile');
 const isDraggingOver = ref(false);
 const copySuccess = ref(false);
 
@@ -719,6 +719,62 @@ function insertQuote() {
   insertAtCursor('> ');
 }
 
+function insertUnderline() {
+  wrapSelection('<u>', '</u>', 'text');
+}
+
+function insertLink() {
+  wrapSelection('[', '](https://example.com)', 'text');
+}
+
+function insertInlineCode() {
+  wrapSelection('`', '`', 'code');
+}
+
+function applyListToSelection(type = 'unordered') {
+  const textarea = getTextarea();
+  const { start, end } = getEditorSelection(textarea);
+  const source = markdownInput.value;
+
+  if (start === end) {
+    insertAtCursor(type === 'ordered' ? '1. ' : '- ');
+    return;
+  }
+
+  const blockStart = source.lastIndexOf('\n', Math.max(0, start - 1)) + 1;
+  const blockEndIndex = source.indexOf('\n', end);
+  const blockEnd = blockEndIndex === -1 ? source.length : blockEndIndex;
+  const block = source.slice(blockStart, blockEnd);
+  const lines = block.split('\n');
+
+  const nextBlock = lines
+    .map((line, index) => {
+      if (!line.trim()) return line;
+      const stripped = line.replace(/^\s*(?:[-*+]\s+|\d+\.\s+)/, '');
+      return type === 'ordered' ? `${index + 1}. ${stripped}` : `- ${stripped}`;
+    })
+    .join('\n');
+
+  markdownInput.value = `${source.slice(0, blockStart)}${nextBlock}${source.slice(blockEnd)}`;
+
+  nextTick(() => {
+    const target = textarea || getTextarea();
+    if (!target) return;
+    target.focus();
+    target.selectionStart = blockStart;
+    target.selectionEnd = blockStart + nextBlock.length;
+    syncEditorSelection({ target });
+  });
+}
+
+function insertOrderedList() {
+  applyListToSelection('ordered');
+}
+
+function insertUnorderedList() {
+  applyListToSelection('unordered');
+}
+
 function insertDivider() {
   insertAtCursor('\n---\n');
 }
@@ -1064,6 +1120,11 @@ const app = createApp({
       syncEditorSelection,
       insertHeading,
       insertQuote,
+      insertUnderline,
+      insertLink,
+      insertInlineCode,
+      insertOrderedList,
+      insertUnorderedList,
       insertCodeBlock,
       insertDivider,
       insertImageSyntax,
