@@ -278,6 +278,7 @@ body {
   overflow: hidden;
   min-height: 0;
   position: relative;
+  background: var( --color-bg);
 }
 
 /* Resize Handle */
@@ -403,7 +404,7 @@ body {
   padding: var(--space-md) var(--space-lg);
 }
 
-.right-panel-body::-webkit-scrollbar { width: 4px; }
+.right-panel-body::-webkit-scrollbar { width: 3px; }
 .right-panel-body::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
 
 /* Right panel slide transition */
@@ -809,7 +810,7 @@ body {
 }
 
 /* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 5px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-tertiary); }

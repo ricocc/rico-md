@@ -14,7 +14,7 @@ export const THEME_CATEGORIES = {
 };
 
 /** 推荐主题列表 */
-const RECOMMENDED = ['nikkei', 'wechat-anthropic', 'wechat-ft', 'wechat-nyt', 'latepost-depth', 'wechat-tech'];
+const RECOMMENDED = ['wechat-default', 'wechat-anthropic'];
 
 /**
  * 获取所有主题列表
