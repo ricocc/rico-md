@@ -86,39 +86,21 @@ function patchMarkdownScanner(md) {
 
 function renderCodeBlock(str, lang, md) {
   let codeContent = md.utils.escapeHtml(str);
-  let language = (lang || '').trim();
+  const language = (lang || '').trim();
 
   if (language && typeof window.hljs !== 'undefined') {
     try {
       if (window.hljs.getLanguage(language)) {
         codeContent = window.hljs.highlight(str, { language }).value;
-      } else {
-        language = '';
       }
     } catch (_error) {
       codeContent = md.utils.escapeHtml(str);
-      language = '';
     }
   }
 
-  const header = `
-    <div class="md-code-block-header">
-      <div class="md-code-block-decorations" data-role="decorations">
-        <span class="md-code-dot dot-red"></span>
-        <span class="md-code-dot dot-yellow"></span>
-        <span class="md-code-dot dot-green"></span>
-      </div>
-      <span class="md-code-block-language" data-role="language">${language ? md.utils.escapeHtml(language) : ''}</span>
-      <button type="button" class="md-code-block-copy" data-action="copy-code">复制代码</button>
-    </div>
-  `;
-
   return `
-    <div class="md-code-block" data-code-block="true" data-code-language="${md.utils.escapeHtml(language)}">
-      ${header}
-      <div class="md-code-block-body">
-        <pre class="md-code-block-pre"><code class="md-code-block-code">${codeContent}</code></pre>
-      </div>
+    <div class="md-code-block" data-code-block="true">
+      <pre class="md-code-block-pre"><code class="md-code-block-code">${codeContent}</code></pre>
     </div>
   `;
 }

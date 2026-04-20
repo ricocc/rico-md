@@ -100,7 +100,7 @@
 
 .theme-category-label {
   grid-column: 1 / -1;
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--color-text-tertiary);
   text-transform: uppercase;

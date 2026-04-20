@@ -291,8 +291,7 @@ async function renderMarkdown() {
       md,
       imageStore,
       styleConfig,
-      codeTheme: getCodeTheme(currentCodeTheme.value),
-      codeBlockSettings: codeBlockSettings.value
+      codeTheme: getCodeTheme(currentCodeTheme.value)
     });
   } catch (error) {
     console.error('渲染失败:', error);
@@ -597,8 +596,7 @@ async function doCopy() {
     styleConfig,
     imageStore,
     showToast: (message, type) => toast.show(message, type),
-    codeTheme: getCodeTheme(currentCodeTheme.value),
-    codeBlockSettings: codeBlockSettings.value
+    codeTheme: getCodeTheme(currentCodeTheme.value)
   });
 
   if (success) {
@@ -868,21 +866,6 @@ function setupSyncScroll() {
   preview.addEventListener('scroll', () => sync(preview, editor));
 }
 
-function handlePreviewClick(event) {
-  const button = event.target.closest('[data-action="copy-code"]');
-  if (!button) return;
-
-  const block = button.closest('[data-code-block="true"]');
-  const code = block?.querySelector('.md-code-block-code')?.textContent || '';
-  if (!code) return;
-
-  navigator.clipboard.writeText(code).then(() => {
-    toast.show('代码已复制', 'success');
-  }).catch(() => {
-    toast.show('代码复制失败', 'error');
-  });
-}
-
 function loadDefaultExample() {
   return `# 公众号 Markdown 编辑器
 
@@ -1141,7 +1124,6 @@ const app = createApp({
       showDeleteConfirm,
       cancelDelete,
       confirmDelete,
-      handlePreviewClick,
       getSaveStateLabel,
       getSaveStateClass,
       togglePanel: (name) => panelManager.toggle(name)

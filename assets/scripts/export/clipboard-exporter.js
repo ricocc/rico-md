@@ -3,14 +3,6 @@
  * @module clipboard-exporter
  */
 
-function getCodeSettings(codeBlockSettings) {
-  return {
-    showLanguageLabel: codeBlockSettings?.showLanguageLabel !== false,
-    showCopyButton: codeBlockSettings?.showCopyButton !== false,
-    showMacDecorations: codeBlockSettings?.showMacDecorations !== false
-  };
-}
-
 function extractBackgroundColor(styleString) {
   if (!styleString) return null;
 
@@ -108,61 +100,23 @@ function convertSingleGridToTable(doc, grid, columns) {
   grid.parentNode.replaceChild(table, grid);
 }
 
-function convertCodeBlocks(doc, codeTheme, codeBlockSettings) {
-  const settings = getCodeSettings(codeBlockSettings);
+function convertCodeBlocks(doc, codeTheme) {
   const blocks = doc.querySelectorAll('[data-code-block="true"]');
 
   blocks.forEach((block) => {
     const code = block.querySelector('.md-code-block-code');
     if (!code) return;
 
-    const language = (block.getAttribute('data-code-language') || '').trim();
-    const wrapper = doc.createElement('div');
-    wrapper.setAttribute(
-      'style',
-      `margin: 24px 0; border-radius: 8px; overflow: hidden; background: ${codeTheme.bg}; border: 1px solid ${codeTheme.borderColor};`
-    );
-
-    const showLanguage = settings.showLanguageLabel && Boolean(language);
-    const showDecorations = settings.showMacDecorations;
-    const showHeader = showLanguage || showDecorations;
-
-    if (showHeader) {
-      const header = doc.createElement('div');
-      header.setAttribute(
-        'style',
-        `padding: 10px 12px; background: ${codeTheme.headerBg}; border-bottom: 1px solid ${codeTheme.borderColor}; font-size: 11px; line-height: 1.4; color: ${codeTheme.textColor};`
-      );
-
-      if (showDecorations) {
-        const dots = doc.createElement('span');
-        dots.textContent = '● ● ●';
-        dots.setAttribute('style', 'display: inline-block; letter-spacing: 4px; margin-right: 10px; color: #ff5f56;');
-        header.appendChild(dots);
-      }
-
-      if (showLanguage) {
-        const label = doc.createElement('span');
-        label.textContent = language.toUpperCase();
-        label.setAttribute('style', `font-weight: 600; letter-spacing: 0.04em; color: ${codeTheme.textColor}; opacity: 0.72;`);
-        header.appendChild(label);
-      }
-
-      wrapper.appendChild(header);
-    }
-
     const pre = doc.createElement('pre');
     pre.setAttribute(
       'style',
-      `margin: 0; padding: 16px; background: ${codeTheme.bg}; color: ${codeTheme.textColor}; overflow-x: auto; white-space: pre; font-family: "SF Mono", Consolas, Monaco, "Courier New", monospace; font-size: 14px; line-height: 1.7;`
+      `margin: 24px 0; padding: 16px; background: ${codeTheme.bg}; color: ${codeTheme.textColor}; overflow-x: auto; white-space: pre; font-family: "SF Mono", Consolas, Monaco, "Courier New", monospace; font-size: 14px; line-height: 1.7; border: 1px solid ${codeTheme.borderColor}; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); -webkit-box-shadow: 0 2px 8px rgba(0,0,0,0.12);`
     );
 
     const codeNode = doc.createElement('code');
     codeNode.textContent = code.textContent || '';
     pre.appendChild(codeNode);
-    wrapper.appendChild(pre);
-
-    block.parentNode.replaceChild(wrapper, block);
+    block.parentNode.replaceChild(pre, block);
   });
 }
 
@@ -205,7 +159,7 @@ function wrapSectionIfNeeded(doc, styleConfig) {
   doc.body.appendChild(section);
 }
 
-export async function copyToWechat({ renderedHTML, styleConfig, imageStore, showToast, codeTheme, codeBlockSettings }) {
+export async function copyToWechat({ renderedHTML, styleConfig, imageStore, showToast, codeTheme }) {
   if (!renderedHTML) {
     showToast('没有内容可复制', 'error');
     return false;
@@ -230,7 +184,7 @@ export async function copyToWechat({ renderedHTML, styleConfig, imageStore, show
       }));
     }
 
-    convertCodeBlocks(doc, codeTheme, codeBlockSettings);
+    convertCodeBlocks(doc, codeTheme);
     flattenListItems(doc);
     normalizeBlockquotes(doc);
     wrapSectionIfNeeded(doc, styleConfig);

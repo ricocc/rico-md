@@ -274,32 +274,6 @@
   border-radius: var(--radius-xs);
 }
 
-.preview-container .md-code-block-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.preview-container .md-code-block-decorations {
-  display: flex;
-  gap: 6px;
-}
-
-.preview-container .md-code-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.preview-container .dot-red { background: #ff5f56; }
-.preview-container .dot-yellow { background: #ffbd2e; }
-.preview-container .dot-green { background: #27c93f; }
-
-.preview-container .md-code-block-copy:hover {
-  opacity: 0.85;
-}
-
 /* ── Empty State ── */
 .empty-state {
   display: flex;

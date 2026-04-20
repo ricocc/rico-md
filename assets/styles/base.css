@@ -7,6 +7,8 @@
  * Design Tokens from reflct.co DESIGN.md
  */
 
+[v-cloak] { display: none; }
+
 :root {
   /* ── Colors ── */
   --color-text-primary: #1a1a1a;

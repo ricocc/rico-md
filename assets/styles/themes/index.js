@@ -22,6 +22,8 @@ import { theme as gaudiOrganic } from './gaudi-organic.js';
 import { theme as guardian } from './guardian.js';
 import { theme as nikkei } from './nikkei.js';
 import { theme as lemonde } from './lemonde.js';
+import { theme as minimalism } from './minimalism.js';
+import { theme as wechatPaperpress } from './wechat-paperpress.js';
 
 /**
  * 所有主题样式配置
@@ -46,4 +48,6 @@ export const STYLES = {
   'guardian': guardian,
   'nikkei': nikkei,
   'lemonde': lemonde,
+  'minimalism': minimalism,
+  'wechat-paperpress': wechatPaperpress,
 };

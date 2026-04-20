@@ -1,33 +1,35 @@
 /**
  * Theme: 优雅简约
  * Key: wechat-elegant
+ * 风格：东方文人气韵。宋体衬线、暖灰低饱和、宽松但不散漫、
+ * 温润克制的书卷质感。
  */
 
 export const theme = {
   "name": "优雅简约",
   "styles": {
-    "container": "max-width: 720px; margin: 0 auto; padding: 12px 20px 30px 20px; font-family: \"Songti SC\", \"SimSun\", Georgia, serif; font-size: 17px; line-height: 2 !important; color: #333 !important; background-color: #fff !important; word-wrap: break-word;",
-    "h1": "font-size: 28px; font-weight: 400; color: #1a1a1a !important; line-height: 1.5 !important; margin: 48px 0 24px; text-align: center; letter-spacing: 2px;",
-    "h2": "font-size: 24px; font-weight: 400; color: #2c2c2c !important; line-height: 1.5 !important; margin: 40px 0 20px; text-align: center; letter-spacing: 1px;",
-    "h3": "font-size: 20px; font-weight: 400; color: #3a3a3a !important; line-height: 1.6 !important; margin: 32px 0 16px; letter-spacing: 0.5px;",
-    "h4": "font-size: 18px; font-weight: 400; color: #444 !important; line-height: 1.6 !important; margin: 28px 0 14px;",
-    "h5": "font-size: 17px; font-weight: 400; color: #555 !important; line-height: 1.6 !important; margin: 24px 0 12px;",
-    "h6": "font-size: 16px; font-weight: 400; color: #666 !important; line-height: 1.6 !important; margin: 20px 0 10px;",
-    "p": "margin: 20px 0 !important; line-height: 2.2 !important; color: #444 !important; text-indent: 2em; letter-spacing: 0.5px;",
-    "strong": "font-weight: 600; color: #1a1a1a !important;",
-    "em": "font-style: italic; color: #666 !important;",
-    "a": "color: #8b7355 !important; text-decoration: none; border-bottom: 1px dotted #8b7355;",
-    "ul": "margin: 20px 0; padding-left: 32px;",
-    "ol": "margin: 20px 0; padding-left: 32px;",
-    "li": "margin: 12px 0; line-height: 2 !important;",
-    "blockquote": "margin: 20px auto; padding: 10px 20px; background-color: transparent !important; border-left: 2px solid #ccc; color: #666 !important; max-width: 600px; line-height: 1.6 !important;",
-    "code": "font-family: Menlo, Monaco, \"Courier New\", monospace; font-size: 14px; padding: 2px 6px; background-color: #f5f5f5 !important; color: #8b4513 !important; border-radius: 3px;",
-    "pre": "margin: 28px 0; padding: 20px; background-color: #f9f9f9 !important; border: 1px solid #e5e5e5; border-radius: 8px; overflow-x: auto; line-height: 1.8 !important;",
-    "hr": "margin: 48px auto; border: none; text-align: center; height: 1px; background-color: #e0e0e0 !important; max-width: 200px;",
-    "img": "max-width: 100%; max-height: 600px !important; height: auto; display: block; margin: 32px auto; border-radius: 8px;",
-    "table": "width: 100%; margin: 28px 0; border-collapse: collapse; font-size: 15px;",
-    "th": "background-color: #f8f8f8 !important; padding: 12px; text-align: left; border-bottom: 2px solid #d0d0d0; font-weight: 400; color: #555 !important;",
-    "td": "padding: 12px; border-bottom: 1px solid #e5e5e5;",
-    "tr": "border-bottom: 1px solid #e5e5e5;"
+    "container": "max-width: 640px; margin: 0 auto; padding: 20px 20px 48px 20px; font-family: \"Songti SC\", \"Noto Serif SC\", Georgia, serif; font-size: 16px; line-height: 2 !important; color: #3b3b3b !important; background-color: #fdfcfa !important; word-wrap: break-word; letter-spacing: 0.02em;",
+    "h1": "font-size: 26px; font-weight: 400; color: #2a2a2a !important; line-height: 1.5 !important; margin: 48px 0 24px; text-align: center; letter-spacing: 0.12em; padding-bottom: 14px; border-bottom: 1px solid #e0ddd5;",
+    "h2": "font-size: 20px; font-weight: 400; color: #2a2a2a !important; line-height: 1.6 !important; margin: 40px 0 20px; letter-spacing: 0.08em; padding-left: 16px; border-left: 2px solid #c4b8a0;",
+    "h3": "font-size: 17.5px; font-weight: 400; color: #3b3b3b !important; line-height: 1.65 !important; margin: 32px 0 16px; letter-spacing: 0.04em;",
+    "h4": "font-size: 16px; font-weight: 600; color: #4a4a4a !important; line-height: 1.65 !important; margin: 28px 0 14px; letter-spacing: 0.03em;",
+    "h5": "font-size: 15px; font-weight: 400; color: #7a7a7a !important; line-height: 1.7 !important; margin: 24px 0 12px; font-style: italic;",
+    "h6": "font-size: 14px; font-weight: 400; color: #9a9a9a !important; line-height: 1.7 !important; margin: 20px 0 10px;",
+    "p": "margin: 20px 0 !important; line-height: 2 !important; color: #3b3b3b !important; text-indent: 2em; letter-spacing: 0.02em;",
+    "strong": "font-weight: 600; color: #2a2a2a !important;",
+    "em": "font-style: italic; color: #7a7a7a !important;",
+    "a": "color: #8b7355 !important; text-decoration: none; border-bottom: 1px solid rgba(139,115,85,0.3);",
+    "ul": "margin: 20px 0; padding-left: 28px;",
+    "ol": "margin: 20px 0; padding-left: 28px;",
+    "li": "margin: 8px 0; line-height: 2 !important; color: #3b3b3b !important;",
+    "blockquote": "margin: 24px 0; padding: 14px 22px; background-color: transparent !important; border-left: 2px solid #c4b8a0; color: #6a6a6a !important; font-size: 15px; line-height: 1.85 !important; font-style: italic;",
+    "code": "font-family: Menlo, Monaco, \"Courier New\", monospace; font-size: 14px; padding: 2px 6px; background-color: #f5f3ef !important; color: #8b7355 !important; border-radius: 3px;",
+    "pre": "margin: 28px 0; padding: 22px; background-color: #f5f3ef !important; border: 1px solid #e0ddd5; border-radius: 6px; overflow-x: auto; line-height: 1.7 !important; font-size: 13px; color: #3b3b3b !important;",
+    "hr": "margin: 48px auto; border: none; height: 1px; background-color: #e0ddd5 !important; max-width: 140px;",
+    "img": "max-width: 100%; max-height: 560px !important; height: auto; display: block; margin: 32px auto; border-radius: 4px;",
+    "table": "width: 100%; margin: 28px 0; border-collapse: collapse; font-size: 14px;",
+    "th": "background-color: #f5f3ef !important; padding: 12px 16px; text-align: left; border-bottom: 1px solid #c4b8a0; font-weight: 600; color: #4a4a4a !important; font-size: 13px; letter-spacing: 0.04em;",
+    "td": "padding: 12px 16px; border-bottom: 1px solid #e8e5df; color: #3b3b3b !important;",
+    "tr": "border: none;"
   }
 };

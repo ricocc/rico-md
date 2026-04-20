@@ -1,33 +1,34 @@
 /**
  * Theme: 原研哉·空
  * Key: kenya-emptiness
+ * 风格：白、留白、极简、虚无感。低对比灰度，字重偏轻，大量呼吸空间。
  */
 
 export const theme = {
-  "name": "原研哉·空",
+  "name": "素白·留白",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 28px 24px 80px 24px; font-family: \"Hiragino Sans\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif; font-size: 16px; line-height: 2.5 !important; color: #333 !important; background-color: #fff !important; word-wrap: break-word;",
-    "h1": "font-size: 24px; font-weight: 300; color: #000 !important; line-height: 2 !important; margin: 80px 0 60px; letter-spacing: 0.5em; text-align: center; padding: 0;",
-    "h2": "font-size: 18px; font-weight: 300; color: #333 !important; line-height: 2 !important; margin: 70px 0 40px; letter-spacing: 0.3em; padding-left: 40px;",
-    "h3": "font-size: 16px; font-weight: 400; color: #666 !important; line-height: 2 !important; margin: 60px 0 30px; letter-spacing: 0.2em;",
-    "h4": "font-size: 15px; font-weight: 400; color: #999 !important; line-height: 2 !important; margin: 40px 0 20px; letter-spacing: 0.1em;",
-    "h5": "font-size: 14px; font-weight: 400; color: #999 !important; line-height: 2 !important; margin: 30px 0 15px;",
-    "h6": "font-size: 14px; font-weight: 400; color: #bbb !important; line-height: 2 !important; margin: 20px 0 10px;",
-    "p": "margin: 40px 0 !important; line-height: 2.5 !important; color: #666 !important; letter-spacing: 0.05em;",
-    "strong": "font-weight: 500; color: #000 !important; letter-spacing: 0.1em;",
-    "em": "font-style: normal; color: #999 !important; font-size: 14px;",
-    "a": "color: #999 !important; text-decoration: none; border-bottom: 1px solid #e0e0e0; padding-bottom: 2px;",
-    "ul": "margin: 60px 0; padding-left: 32px; list-style-type: circle;",
-    "ol": "margin: 60px 0; padding-left: 32px; list-style-type: decimal;",
-    "li": "margin: 30px 0; line-height: 2.5 !important; color: #666 !important; padding-left: 40px; position: relative;",
-    "blockquote": "margin: 40px auto; padding: 0; background-color: transparent !important; border: none; color: #999 !important; font-size: 14px; line-height: 2.2 !important; text-align: center; max-width: 480px; letter-spacing: 0.2em;",
-    "code": "font-family: \"SF Mono\", Menlo, monospace; font-size: 13px; padding: 4px 8px; background-color: #f5f5f5 !important; color: #666 !important; border-radius: 2px;",
-    "pre": "margin: 50px 0; padding: 40px; background-color: #f9f9f9 !important; border: none; border-radius: 0; overflow-x: auto; line-height: 2 !important;",
-    "hr": "margin: 80px auto; border: none; width: 40px; height: 1px; background-color: #e0e0e0 !important;",
-    "img": "max-width: 100%; max-height: 500px !important; height: auto; display: block; margin: 60px auto;",
-    "table": "width: 100%; margin: 60px 0; border-collapse: collapse; font-size: 14px;",
-    "th": "background-color: transparent !important; padding: 20px; text-align: left; border-bottom: 1px solid #e0e0e0; font-weight: 400; color: #999 !important;",
-    "td": "padding: 20px; border-bottom: 1px solid #f5f5f5; color: #666 !important;",
+    "container": "max-width: 580px; margin: 0 auto; padding: 28px 24px 60px 24px; font-family: \"Hiragino Sans\", \"PingFang SC\", \"Noto Sans SC\", sans-serif; font-size: 14px; line-height: 2.2 !important; color: #888 !important; background-color: #fafafa !important; word-wrap: break-word; letter-spacing: 0.04em;",
+    "h1": "font-size: 22px; font-weight: 300; color: #333 !important; line-height: 1.8 !important; margin: 40px 0 24px; letter-spacing: 0.4em; text-align: center;",
+    "h2": "font-size: 17px; font-weight: 300; color: #555 !important; line-height: 1.8 !important; margin: 36px 0 18px; letter-spacing: 0.25em; padding-left: 32px;",
+    "h3": "font-size: 15px; font-weight: 400; color: #666 !important; line-height: 1.8 !important; margin: 30px 0 14px; letter-spacing: 0.15em;",
+    "h4": "font-size: 14px; font-weight: 400; color: #999 !important; line-height: 2 !important; margin: 24px 0 12px; letter-spacing: 0.1em;",
+    "h5": "font-size: 13px; font-weight: 400; color: #aaa !important; line-height: 2 !important; margin: 20px 0 10px;",
+    "h6": "font-size: 13px; font-weight: 400; color: #bbb !important; line-height: 2 !important; margin: 18px 0 8px;",
+    "p": "margin: 0 0 20px !important; line-height: 2.2 !important; color: #777 !important; letter-spacing: 0.04em;",
+    "strong": "font-weight: 500; color: #444 !important;",
+    "em": "font-style: normal; color: #aaa !important; font-size: 13.5px;",
+    "a": "color: #999 !important; text-decoration: none; border-bottom: 1px solid #ddd;",
+    "ul": "margin: 0 0 20px; padding-left: 28px; list-style-type: circle;",
+    "ol": "margin: 0 0 20px; padding-left: 28px; list-style-type: decimal;",
+    "li": "margin: 8px 0; line-height: 2.2 !important; color: #777 !important;",
+    "blockquote": "margin: 20px auto; padding: 0; background-color: transparent !important; border: none; color: #aaa !important; font-size: 13.5px; line-height: 2 !important; text-align: center; max-width: 420px; letter-spacing: 0.15em;",
+    "code": "font-family: \"SF Mono\", Menlo, monospace; font-size: 12.5px; padding: 3px 7px; background-color: #f0f0f0 !important; color: #888 !important; border-radius: 2px;",
+    "pre": "margin: 24px 0; padding: 24px; background-color: #f5f5f5 !important; border: none; border-radius: 0; overflow-x: auto; line-height: 1.8 !important; font-size: 12.5px; color: #888 !important;",
+    "hr": "margin: 40px auto; border: none; width: 36px; height: 1px; background-color: #ddd !important;",
+    "img": "max-width: 100%; max-height: 480px !important; height: auto; display: block; margin: 32px auto;",
+    "table": "width: 100%; margin: 24px 0; border-collapse: collapse; font-size: 13px;",
+    "th": "background-color: transparent !important; padding: 14px; text-align: left; border-bottom: 1px solid #e0e0e0; font-weight: 400; color: #999 !important; letter-spacing: 0.08em;",
+    "td": "padding: 14px; border-bottom: 1px solid #f0f0f0; color: #888 !important;",
     "tr": "border: none;"
   }
 };

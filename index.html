@@ -215,7 +215,7 @@
               </div>
             </div>
 
-            <div class="preview-content" @click="handlePreviewClick">
+            <div class="preview-content">
               <div v-if="!renderedContent" class="empty-state">
                 <svg class="lucide lucide-file-pen-line empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h-6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8l6 6v3"></path><path d="M14 2v6h6"></path><path d="M15 18.5 18.5 15"></path><path d="M18 14.5 20.5 17"></path><path d="M13 20l1.5-4.5"></path></svg>
                 <h3>开始编辑</h3>
@@ -265,23 +265,6 @@
 
             <template v-if="activePanel === 'code'">
               <div class="code-panel-stack">
-                <div class="code-panel-section">
-                  <div class="code-panel-section-title">代码块显示（通用）</div>
-                  <div class="panel-settings-group compact">
-                    <label class="settings-label">
-                      <span>显示代码语言</span>
-                      <div class="toggle-switch" :class="{ active: codeBlockSettings.showLanguageLabel }" @click="codeBlockSettings.showLanguageLabel = !codeBlockSettings.showLanguageLabel"></div>
-                    </label>
-                    <label class="settings-label">
-                      <span>显示复制按钮</span>
-                      <div class="toggle-switch" :class="{ active: codeBlockSettings.showCopyButton }" @click="codeBlockSettings.showCopyButton = !codeBlockSettings.showCopyButton"></div>
-                    </label>
-                    <label class="settings-label">
-                      <span>显示 macOS 装饰</span>
-                      <div class="toggle-switch" :class="{ active: codeBlockSettings.showMacDecorations }" @click="codeBlockSettings.showMacDecorations = !codeBlockSettings.showMacDecorations"></div>
-                    </label>
-                  </div>
-                </div>
                 <div class="code-panel-section">
                   <div class="code-panel-section-title">代码块主题</div>
                   <div class="code-theme-grid">

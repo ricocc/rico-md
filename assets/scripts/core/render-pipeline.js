@@ -3,15 +3,7 @@
  * @module render-pipeline
  */
 
-function getDefaultCodeBlockSettings(codeBlockSettings) {
-  return {
-    showLanguageLabel: codeBlockSettings?.showLanguageLabel !== false,
-    showCopyButton: codeBlockSettings?.showCopyButton !== false,
-    showMacDecorations: codeBlockSettings?.showMacDecorations !== false
-  };
-}
-
-export async function renderPipeline({ markdown, md, imageStore, styleConfig, codeTheme, codeBlockSettings }) {
+export async function renderPipeline({ markdown, md, imageStore, styleConfig, codeTheme }) {
   if (!markdown.trim()) return '';
 
   const { preprocessMarkdown } = await import('./markdown-engine.js');
@@ -23,7 +15,7 @@ export async function renderPipeline({ markdown, md, imageStore, styleConfig, co
     html = await processImageProtocol(html, imageStore);
   }
 
-  return applyInlineStyles(html, styleConfig, codeTheme, codeBlockSettings);
+  return applyInlineStyles(html, styleConfig, codeTheme);
 }
 
 async function processImageProtocol(html, imageStore) {
@@ -51,7 +43,7 @@ async function processImageProtocol(html, imageStore) {
   return doc.body.innerHTML;
 }
 
-function applyInlineStyles(html, styleConfig, codeTheme, codeBlockSettings) {
+function applyInlineStyles(html, styleConfig, codeTheme) {
   const style = styleConfig.styles;
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
@@ -69,7 +61,7 @@ function applyInlineStyles(html, styleConfig, codeTheme, codeBlockSettings) {
     });
   });
 
-  applyCodeThemeStyles(doc, codeTheme, codeBlockSettings);
+  applyCodeThemeStyles(doc, codeTheme);
 
   const container = doc.createElement('div');
   container.setAttribute('style', style.container);
@@ -77,71 +69,24 @@ function applyInlineStyles(html, styleConfig, codeTheme, codeBlockSettings) {
   return container.outerHTML;
 }
 
-function applyCodeThemeStyles(doc, codeTheme, codeBlockSettings) {
+function applyCodeThemeStyles(doc, codeTheme) {
   if (!codeTheme) return;
-
-  const settings = getDefaultCodeBlockSettings(codeBlockSettings);
   const blocks = doc.querySelectorAll('[data-code-block="true"]');
 
   blocks.forEach((block) => {
-    const header = block.querySelector('.md-code-block-header');
-    const decorations = block.querySelector('.md-code-block-decorations');
-    const language = block.querySelector('.md-code-block-language');
-    const copyButton = block.querySelector('.md-code-block-copy');
-    const body = block.querySelector('.md-code-block-body');
     const pre = block.querySelector('.md-code-block-pre');
     const code = block.querySelector('.md-code-block-code');
-    const languageValue = (block.getAttribute('data-code-language') || '').trim();
-
-    const showLanguage = settings.showLanguageLabel && Boolean(languageValue);
-    const showHeader = settings.showMacDecorations || settings.showCopyButton || showLanguage;
 
     block.setAttribute(
       'style',
-      `margin: 20px 0; border-radius: 8px; overflow: hidden; background: ${codeTheme.bg}; border: 1px solid ${codeTheme.borderColor}; box-shadow: 0 2px 8px rgba(0,0,0,0.15);`
+      'margin: 24px 0;'
     );
 
-    if (header) {
-      header.setAttribute(
-        'style',
-        showHeader
-          ? `display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 10px 12px; background: ${codeTheme.headerBg}; border-bottom: 1px solid ${codeTheme.borderColor};`
-          : 'display: none;'
-      );
-    }
-
-    if (decorations) {
-      decorations.setAttribute(
-        'style',
-        settings.showMacDecorations ? 'display: flex; align-items: center; gap: 6px;' : 'display: none;'
-      );
-    }
-
-    if (language) {
-      language.textContent = showLanguage ? languageValue : '';
-      language.setAttribute(
-        'style',
-        showLanguage
-          ? `display: inline-flex; align-items: center; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: ${codeTheme.textColor}; opacity: 0.72;`
-          : 'display: none;'
-      );
-    }
-
-    if (copyButton) {
-      copyButton.setAttribute(
-        'style',
-        settings.showCopyButton
-          ? `display: inline-flex; align-items: center; justify-content: center; margin-left: auto; padding: 4px 10px; border: 1px solid ${codeTheme.borderColor}; border-radius: 999px; background: transparent; color: ${codeTheme.textColor}; font-size: 11px; cursor: pointer;`
-          : 'display: none;'
-      );
-    }
-
-    if (body) {
-      body.setAttribute('style', `background: ${codeTheme.bg};`);
-    }
-
     if (pre) {
-      pre.setAttribute('style', `margin: 0; padding: 16px; overflow-x: auto; background: ${codeTheme.bg};`);
+      pre.setAttribute(
+        'style',
+        `margin: 0; padding: 16px; overflow-x: auto; background: ${codeTheme.bg}; border: 1px solid ${codeTheme.borderColor}; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); -webkit-box-shadow: 0 2px 8px rgba(0,0,0,0.12);`
+      );
     }
 
     if (code) {
