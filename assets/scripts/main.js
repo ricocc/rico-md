@@ -34,7 +34,7 @@ const documents = ref([]);
 const activeDocumentId = ref(null);
 const currentDocumentTitle = ref('');
 const documentSearch = ref('');
-const previewMode = ref('mobile');
+const previewMode = ref('desktop');
 const isDraggingOver = ref(false);
 const copySuccess = ref(false);
 
