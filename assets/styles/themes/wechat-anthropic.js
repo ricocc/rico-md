@@ -25,7 +25,7 @@ export const theme = {
     "pre": "margin: 28px 0; padding: 20px; background: #fbf6f4!important; color: #141413 !important;font-size:13px; border-radius: 12px; overflow-x: auto; line-height: 1.6 !important; box-shadow: 0 4px 20px rgba(193, 95, 60, 0.15);border: 1px solid #e8e6dc;",
     "hr": "margin: 64px auto; border: none; height: 2px; background: linear-gradient(to right, transparent, rgba(193, 95, 60, 0.3), rgba(157, 200, 141, 0.3), transparent); max-width: 240px;",
     "img": "max-width: 100%; max-height: 600px !important; height: auto; display: block; margin: 32px auto 24px; border-radius: 12px; box-shadow: 0 8px 32px rgba(193, 95, 60, 0.12);",
-    "table": "width: 100%; margin: 40px 0; border-collapse: collapse; font-size: 15px; border-radius: 8px; overflow: hidden;",
+    "table": "width: 100%; margin: 20px 0; border-collapse: collapse; font-size: 15px; border-radius: 8px; overflow: hidden;",
     "th": "background: linear-gradient(135deg, rgba(193, 95, 60, 0.08) 0%, rgba(157, 200, 141, 0.08) 100%); padding: 16px 20px; text-align: left; border: none; font-weight: 600; color: #2b2b2b !important; border-bottom: 2px solid rgba(193, 95, 60, 0.2);",
     "td": "padding: 16px 20px; border: none; border-bottom: 1px solid rgba(193, 95, 60, 0.1); color: #2b2b2b !important;",
     "tr": "border: none;"

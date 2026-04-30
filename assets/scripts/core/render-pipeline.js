@@ -83,7 +83,7 @@ function normalizeTableOverflow(doc) {
   tables.forEach((table) => {
     if (table.closest('.md-table-scroll')) return;
 
-    appendStyleText(table, 'max-width: 100%; width: max-content; min-width: 100%; table-layout: auto;');
+    appendStyleText(table, 'max-width: 100%; width: max-content; min-width: 100%; table-layout: auto;margin-bottom:16px;');
 
     const parent = table.parentNode;
     if (!parent) return;
@@ -92,7 +92,7 @@ function normalizeTableOverflow(doc) {
     wrapper.className = 'md-table-scroll';
     wrapper.setAttribute(
       'style',
-      'max-width: 100%; width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;'
+      'max-width: 100%; width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;margin-bottom:28px;'
     );
 
     parent.insertBefore(wrapper, table);
