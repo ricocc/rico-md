@@ -7,10 +7,10 @@ export const theme = {
   "name": "Claude",
   "styles": {
     "container": "max-width: 700px; margin: 0 auto; padding: 16px 16px 56px 16px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif; font-size: 18px; line-height: 1.7 !important; color: #2b2b2b !important; background-color: #fff !important; word-wrap: break-word; letter-spacing: -0.01em;",
-    "h1": "font-size: 24px; font-weight: 600; color: #C15F3C !important; line-height: 1.15 !important; margin: 32px 0 16px; letter-spacing: -0.025em; background: linear-gradient(135deg, #C15F3C 0%, #e97d5b 50%, #CC8B7A 100%); -webkit-background-clip: text; background-clip: text;",
+    "h1": "font-size: 24px; font-weight: 600; color: #C15F3C !important; line-height: 1.15 !important; margin: 32px 0 24px; letter-spacing: -0.025em; background: linear-gradient(135deg, #C15F3C 0%, #e97d5b 50%, #CC8B7A 100%); -webkit-background-clip: text; background-clip: text;",
     "h2": "font-size: 22px; font-weight: 600; color: #C15F3C !important; line-height: 1.25 !important; margin: 40px 0 20px; letter-spacing: -0.02em; background: linear-gradient(135deg, #C15F3C 0%, #9DC88D 100%); -webkit-background-clip: text; background-clip: text;",
     "h3": "font-size: 18px; font-weight: 600; color: #2b2b2b !important; line-height: 1.3 !important; margin: 36px 0 18px; letter-spacing: -0.015em;",
-    "h4": "font-size: 17px; font-weight: 600; color: #3a3a3a !important; line-height: 1.4 !important; margin: 28px 0 14px; letter-spacing: -0.01em;",
+    "h4": "font-size: 17px; font-weight: 600; color: #2a2a2a !important; line-height: 1.4 !important; margin: 28px 0 14px; letter-spacing: -0.01em;",
     "h5": "font-size: 15px; font-weight: 600; color: #4a4a4a !important; line-height: 1.45 !important; margin: 24px 0 12px;",
     "h6": "font-size: 14px; font-weight: 600; color: #5a5a5a !important; line-height: 1.5 !important; margin: 20px 0 10px;",
     "p": "margin: 16px 0 12px!important; line-height: 1.75 !important; color: #2b2b2b !important; font-size: 15px; letter-spacing: -0.005em;",

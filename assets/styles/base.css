@@ -104,7 +104,7 @@
   --font-mono: "SF Mono", "Menlo", "Monaco", "Cascadia Code", "Consolas", monospace;
 
   /* ── Preview ── */
-  --preview-width-mobile: 375px;
+  --preview-width-mobile: 402px;
   --preview-width-desktop: 720px;
 }
 

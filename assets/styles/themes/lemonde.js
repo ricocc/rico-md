@@ -22,7 +22,7 @@ export const theme = {
     "ul": "margin: 0 0 14px; padding-left: 22px;",
     "ol": "margin: 0 0 14px; padding-left: 22px;",
     "li": "margin: 4px 0; line-height: 1.82 !important; color: #1e1e1e !important;",
-    "blockquote": "margin: 0 0 14px; padding: 12px 20px; background-color: transparent !important; border-top: 1px solid #1e1e1e; border-bottom: 1px solid #1e1e1e; color: #3a3a3a !important; font-size: 15px; line-height: 1.65 !important; font-style: italic; text-align: center; font-family: Georgia, serif;",
+    "blockquote": "margin: 0 0 14px; padding: 12px 20px; background-color: transparent !important; border-top: 1px solid #1e1e1e; border-bottom: 1px solid #1e1e1e; color: #2a2a2a !important; font-size: 15px; line-height: 1.65 !important; font-style: italic; text-align: center; font-family: Georgia, serif;",
     "code": "font-family: \"Courier Prime\", \"Courier New\", monospace; font-size: 13px; padding: 2px 5px; background-color: #f5f5f4 !important; color: #1e1e1e !important; border: 1px solid #e0e0df;",
     "pre": "margin: 14px 0; padding: 18px; background-color: #f5f5f4 !important; border: 1px solid #1e1e1e; border-radius: 2px; overflow-x: auto; line-height: 1.55 !important; font-size: 12.5px; color: #1e1e1e !important;",
     "hr": "margin: 28px auto; border: none; height: 1px; background-color: #1e1e1e !important; max-width: 40px;",

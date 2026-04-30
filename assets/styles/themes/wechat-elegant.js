@@ -11,7 +11,7 @@ export const theme = {
     "container": "max-width: 640px; margin: 0 auto; padding: 20px 20px 48px 20px; font-family: \"Songti SC\", \"Noto Serif SC\", Georgia, serif; font-size: 16px; line-height: 2 !important; color: #3b3b3b !important; background-color: #fdfcfa !important; word-wrap: break-word; letter-spacing: 0.02em;",
     "h1": "font-size: 26px; font-weight: 400; color: #2a2a2a !important; line-height: 1.5 !important; margin: 48px 0 24px; text-align: center; letter-spacing: 0.12em; padding-bottom: 14px; border-bottom: 1px solid #e0ddd5;",
     "h2": "font-size: 20px; font-weight: 400; color: #2a2a2a !important; line-height: 1.6 !important; margin: 40px 0 20px; letter-spacing: 0.08em; padding-left: 16px; border-left: 2px solid #c4b8a0;",
-    "h3": "font-size: 17.5px; font-weight: 400; color: #3b3b3b !important; line-height: 1.65 !important; margin: 32px 0 16px; letter-spacing: 0.04em;",
+    "h3": "font-size: 17.5px; font-weight: 400; color: #3b3b3b !important; line-height: 1.65 !important; margin: 32px 0 24px; letter-spacing: 0.04em;",
     "h4": "font-size: 16px; font-weight: 600; color: #4a4a4a !important; line-height: 1.65 !important; margin: 28px 0 14px; letter-spacing: 0.03em;",
     "h5": "font-size: 15px; font-weight: 400; color: #7a7a7a !important; line-height: 1.7 !important; margin: 24px 0 12px; font-style: italic;",
     "h6": "font-size: 14px; font-weight: 400; color: #9a9a9a !important; line-height: 1.7 !important; margin: 20px 0 10px;",

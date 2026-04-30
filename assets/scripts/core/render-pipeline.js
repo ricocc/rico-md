@@ -61,12 +61,22 @@ function applyInlineStyles(html, styleConfig, codeTheme) {
     });
   });
 
+  normalizeBlockquoteParagraphSpacing(doc);
   applyCodeThemeStyles(doc, codeTheme);
 
   const container = doc.createElement('div');
   container.setAttribute('style', style.container);
   container.innerHTML = doc.body.innerHTML;
   return container.outerHTML;
+}
+
+function normalizeBlockquoteParagraphSpacing(doc) {
+  const paragraphs = doc.querySelectorAll('blockquote > p');
+
+  paragraphs.forEach((paragraph) => {
+    const currentStyle = paragraph.getAttribute('style') || '';
+    paragraph.setAttribute('style', `${currentStyle}; margin: 0 !important; padding: 0;`);
+  });
 }
 
 function applyCodeThemeStyles(doc, codeTheme) {

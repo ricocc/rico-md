@@ -28,6 +28,6 @@ export const theme = {
     "table": "width: 100%; margin: 28px 0; border-collapse: collapse; font-size: 16px; border-radius: 6px; overflow: hidden;",
     "th": "background-color: #db5e5e !important; color: #fff !important; padding: 12px 16px; text-align: left; font-weight: 600; border: none;",
     "td": "padding: 12px 16px; border: none; border-bottom: 1px solid #e0e0e0; color: #1a1a1a !important; background-color: #fff !important;",
-    "tr": "border-bottom: 1px solid #e0e0e0;"
+    "tr": "border-bottom: 1px solid #e0e0e0;line-height:1.1;"
   }
 };

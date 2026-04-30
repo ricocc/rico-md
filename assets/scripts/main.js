@@ -9,6 +9,7 @@ import { createMarkdownEngine } from './core/markdown-engine.js';
 import { createTurndownService, createPasteHandler } from './core/paste-handler.js';
 import { renderPipeline } from './core/render-pipeline.js';
 import { copyToWechat } from './export/clipboard-exporter.js';
+import { copyToX } from './export/x-clipboard-exporter.js';
 import { getCategorizedThemes, getStyleName, isRecommended, getStarredStyles, toggleStarStyle } from './ui/theme-manager.js';
 import { getCodeTheme, getCodeThemeList, DEFAULT_CODE_THEME } from './ui/code-themes.js';
 import { createToast } from './ui/toast.js';
@@ -605,17 +606,12 @@ async function doCopy() {
   }
 }
 
-function copyToTwitter() {
+async function copyToTwitter() {
   if (!renderedContent.value) return;
 
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(renderedContent.value, 'text/html');
-  const text = doc.body.textContent || '';
-
-  navigator.clipboard.writeText(text).then(() => {
-    toast.show('已复制纯文本，可粘贴到 X', 'success');
-  }).catch(() => {
-    toast.show('复制失败', 'error');
+  await copyToX({
+    renderedHTML: renderedContent.value,
+    showToast: (message, type) => toast.show(message, type)
   });
 }
 
