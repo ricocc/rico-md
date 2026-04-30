@@ -2,14 +2,22 @@
 
 一个面向微信公众号写作与排版的纯前端 Markdown 编辑器，支持实时预览、代码块主题、图片本地持久化与一键复制富文本。
 
-## 仓库地址：
-
-- https://github.com/ricocc/rico-md/
-
 
 ## 在线地址
 
 - [https://md.ricoui.com](https://md.ricoui.com/)
+
+
+## 仓库地址：
+
+- https://github.com/ricocc/rico-md/
+
+## Screenshot
+
+![](./assets/images/cover-index.jpg)
+
+![](./assets/images/cover-setting.jpg)
+
 
 ## 核心能力
 
