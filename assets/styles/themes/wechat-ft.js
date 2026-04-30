@@ -6,7 +6,7 @@
 export const theme = {
   "name": "金融时报",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 20px 16px 40px 16px; font-family: Georgia, \"Songti SC\", \"Times New Roman\", Times, serif; font-size: 15px; line-height: 1.8 !important; color: #33302e !important; background-color: #fff2e8 !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 20px 16px 40px 16px; font-family: Georgia, \"Songti SC\", \"Times New Roman\", Times, serif; font-size: 15px; line-height: 1.8 !important; color: #33302e !important; background-color: #fff2e8 !important; word-wrap: break-word;",
     "h1": "font-size: 24px; font-weight: 700; color: #1a1a1a !important; line-height: 1.3 !important; margin: 28px 0 16px; letter-spacing: -0.01em; border-bottom: 3px solid #990f3d; padding-bottom: 10px;",
     "h2": "font-size: 20px; font-weight: 700; color: #1a1a1a !important; line-height: 1.35 !important; margin: 24px 0 12px;",
     "h3": "font-size: 17px; font-weight: 700; color: #990f3d !important; line-height: 1.4 !important; margin: 20px 0 10px;",

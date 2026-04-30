@@ -7,7 +7,7 @@
 export const theme = {
   "name": "素灰·清水",
   "styles": {
-    "container": "max-width: 600px; margin: 0 auto; padding: 20px 20px 50px 20px; font-family: \"Helvetica Neue\", Arial, \"Noto Sans SC\", sans-serif; font-size: 14.5px; line-height: 2 !important; color: #4a4a4a !important; background-color: #f2f2f0 !important; word-wrap: break-word; letter-spacing: 0.02em;",
+    "container": "max-width: 100%; margin: 0 auto; padding: 20px 20px 50px 20px; font-family: \"Helvetica Neue\", Arial, \"Noto Sans SC\", sans-serif; font-size: 14.5px; line-height: 2 !important; color: #4a4a4a !important; background-color: #f2f2f0 !important; word-wrap: break-word; letter-spacing: 0.02em;",
     "h1": "font-size: 22px; font-weight: 300; color: #1a1a1a !important; line-height: 1.5 !important; margin: 28px 0 18px; padding-bottom: 14px; border-bottom: 1px solid #c0bfb8; letter-spacing: 0.15em;",
     "h2": "font-size: 18px; font-weight: 400; color: #2a2a2a !important; line-height: 1.6 !important; margin: 24px 0 14px; padding: 10px 0; border-top: 1px solid #d5d4ce; border-bottom: 1px solid #d5d4ce; letter-spacing: 0.1em; background-color: rgba(255,255,255,0.5) !important;",
     "h3": "font-size: 16px; font-weight: 400; color: #2a2a2a !important; line-height: 1.7 !important; margin: 22px 0 12px; letter-spacing: 0.06em;",

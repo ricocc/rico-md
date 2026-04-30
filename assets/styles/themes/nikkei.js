@@ -8,7 +8,7 @@
 export const theme = {
   "name": "朱红·日经",
   "styles": {
-    "container": "max-width: 620px; margin: 0 auto; padding: 12px 14px 36px 14px; font-family: \"Hiragino Kaku Gothic ProN\", \"Yu Gothic\", \"Noto Sans SC\", \"Meiryo\", sans-serif; font-size: 14.5px; line-height: 1.78 !important; color: #1a1a1a !important; background-color: #fff !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 12px 14px 36px 14px; font-family: \"Hiragino Kaku Gothic ProN\", \"Yu Gothic\", \"Noto Sans SC\", \"Meiryo\", sans-serif; font-size: 14.5px; line-height: 1.78 !important; color: #1a1a1a !important; background-color: #fff !important; word-wrap: break-word;",
     "h1": "font-size: 22px; font-weight: 700; color: #000 !important; line-height: 1.35 !important; margin: 22px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #000;",
     "h2": "font-size: 18px; font-weight: 700; color: #C41230 !important; line-height: 1.4 !important; margin: 20px 0 10px; padding-left: 10px; border-left: 3px solid #C41230;",
     "h3": "font-size: 16px; font-weight: 600; color: #1a1a1a !important; line-height: 1.45 !important; margin: 16px 0 8px; padding: 4px 8px; background-color: #f7f7f7 !important;",

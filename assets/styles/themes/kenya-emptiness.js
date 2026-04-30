@@ -7,7 +7,7 @@
 export const theme = {
   "name": "素白·留白",
   "styles": {
-    "container": "max-width: 580px; margin: 0 auto; padding: 28px 24px 60px 24px; font-family: \"Hiragino Sans\", \"PingFang SC\", \"Noto Sans SC\", sans-serif; font-size: 14px; line-height: 2.2 !important; color: #888 !important; background-color: #fefefd !important; word-wrap: break-word; letter-spacing: 0.012em;",
+    "container": "max-width: 100%; margin: 0 auto; padding: 28px 24px 60px 24px; font-family: \"Hiragino Sans\", \"PingFang SC\", \"Noto Sans SC\", sans-serif; font-size: 14px; line-height: 2.2 !important; color: #888 !important; background-color: #fefefd !important; word-wrap: break-word; letter-spacing: 0.012em;",
     "h1": "font-size: 22px; font-weight: 300; color: #222222 !important; line-height: 1.8 !important; margin: 40px 0 24px; letter-spacing: 0.08em; text-align: center;",
     "h2": "font-size: 17px; font-weight: 300; color: #222222 !important; line-height: 1.8 !important; margin: 36px 0 18px; letter-spacing: 0.08em; padding-left: 32px;",
     "h3": "font-size: 15px; font-weight: 400; color: #444444 !important; line-height: 1.8 !important; margin: 30px 0 14px; letter-spacing: 0.08em;",

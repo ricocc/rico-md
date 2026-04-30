@@ -6,7 +6,7 @@
 export const theme = {
   "name": "深度阅读",
   "styles": {
-    "container": "max-width: 680px; margin: 0 auto; padding: 14px 12px 32px 12px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 16px; line-height: 1.75 !important; color: #1a1a1a !important;    letter-spacing: -0.2px; background-color: #fff !important; word-wrap: break-word; letter-spacing: 0.01em;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 14px 12px 32px 12px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 16px; line-height: 1.75 !important; color: #1a1a1a !important;    letter-spacing: -0.2px; background-color: #fff !important; word-wrap: break-word; letter-spacing: 0.01em;",
     "h1": "font-size: 32px; font-weight: 700; color: #0a0a0a !important; line-height: 1.2 !important; margin: 48px 0 24px; letter-spacing: -0.02em;",
     "h2": "font-size: 28px; font-weight: 700; color: #0a0a0a !important; line-height: 1.3 !important; margin: 40px 0 20px; letter-spacing: -0.01em;",
     "h3": "font-size: 22px; font-weight: 700; color: #0a0a0a !important; line-height: 1.4 !important; margin: 32px 0 24px;",

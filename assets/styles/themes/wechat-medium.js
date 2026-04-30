@@ -6,7 +6,7 @@
 export const theme = {
   "name": "Medium 阅读",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 20px 12px 48px 12px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.75 !important; color: #292929 !important; background-color: #fff !important; word-wrap: break-word; letter-spacing: -0.003em;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 20px 12px 48px 12px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.75 !important; color: #292929 !important; background-color: #fff !important; word-wrap: break-word; letter-spacing: -0.003em;",
     "h1": "font-size: 26px; font-weight: 700; color: #1a1a1a !important; line-height: 1.3 !important; margin: 32px 0 18px; letter-spacing: -0.02em; font-family: Georgia, \"Times New Roman\", serif;",
     "h2": "font-size: 22px; font-weight: 700; color: #1a1a1a !important; line-height: 1.35 !important; margin: 28px 0 14px; letter-spacing: -0.015em; font-family: Georgia, \"Times New Roman\", serif;",
     "h3": "font-size: 19px; font-weight: 700; color: #1a1a1a !important; line-height: 1.4 !important; margin: 24px 0 12px; letter-spacing: -0.01em; font-family: Georgia, \"Times New Roman\", serif;",

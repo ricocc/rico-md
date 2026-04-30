@@ -8,7 +8,7 @@
 export const theme = {
   "name": "优雅简约",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 20px 20px 48px 20px; font-family: \"Songti SC\", \"Noto Serif SC\", Georgia, serif; font-size: 16px; line-height: 2 !important; color: #3b3b3b !important; background-color: #fdfcfa !important; word-wrap: break-word; letter-spacing: 0.02em;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 20px 20px 48px 20px; font-family: \"Songti SC\", \"Noto Serif SC\", Georgia, serif; font-size: 16px; line-height: 2 !important; color: #3b3b3b !important; background-color: #fdfcfa !important; word-wrap: break-word; letter-spacing: 0.02em;",
     "h1": "font-size: 26px; font-weight: 400; color: #2a2a2a !important; line-height: 1.5 !important; margin: 48px 0 24px; text-align: center; letter-spacing: 0.12em; padding-bottom: 14px; border-bottom: 1px solid #e0ddd5;",
     "h2": "font-size: 20px; font-weight: 400; color: #2a2a2a !important; line-height: 1.6 !important; margin: 40px 0 20px; letter-spacing: 0.08em; padding-left: 16px; border-left: 2px solid #c4b8a0;",
     "h3": "font-size: 17.5px; font-weight: 400; color: #3b3b3b !important; line-height: 1.65 !important; margin: 32px 0 24px; letter-spacing: 0.04em;",

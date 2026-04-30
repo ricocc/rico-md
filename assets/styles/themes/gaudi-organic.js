@@ -8,7 +8,7 @@
 export const theme = {
   "name": "赤陶·有机",
   "styles": {
-    "container": "max-width: 620px; margin: 0 auto; padding: 20px 18px 50px 18px; font-family: Georgia, \"Noto Serif SC\", \"Songti SC\", Baskerville, serif; font-size: 15px; line-height: 1.85 !important; color: #3d2e1f !important; background-color: #fdf6ec !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 20px 18px 50px 18px; font-family: Georgia, \"Noto Serif SC\", \"Songti SC\", Baskerville, serif; font-size: 15px; line-height: 1.85 !important; color: #3d2e1f !important; background-color: #fdf6ec !important; word-wrap: break-word;",
     "h1": "font-size: 24px; font-weight: 700; color: #1a5276 !important; line-height: 1.35 !important; margin: 28px 0 16px; text-align: center; letter-spacing: -0.01em; padding-bottom: 10px; border-bottom: 2px solid #c4784a;",
     "h2": "font-size: 20px; font-weight: 600; color: #a04030 !important; line-height: 1.4 !important; margin: 24px 0 12px; padding: 8px 14px; background-color: rgba(196,120,74,0.08) !important; border-radius: 6px;",
     "h3": "font-size: 17px; font-weight: 600; color: #3d7a5f !important; line-height: 1.45 !important; margin: 20px 0 10px; padding-left: 12px; border-left: 3px solid #c4a94a;",

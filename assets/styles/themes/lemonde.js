@@ -8,7 +8,7 @@
 export const theme = {
   "name": "素墨·世界报",
   "styles": {
-    "container": "max-width: 620px; margin: 0 auto; padding: 18px 18px 50px 18px; font-family: Georgia, \"Noto Serif SC\", \"Songti SC\", \"Times New Roman\", serif; font-size: 15px; line-height: 1.82 !important; color: #1e1e1e !important; background-color: #fdfdfc !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 18px 18px 50px 18px; font-family: Georgia, \"Noto Serif SC\", \"Songti SC\", \"Times New Roman\", serif; font-size: 15px; line-height: 1.82 !important; color: #1e1e1e !important; background-color: #fdfdfc !important; word-wrap: break-word;",
     "h1": "font-size: 24px; font-weight: 700; color: #1e1e1e !important; line-height: 1.3 !important; margin: 26px 0 14px; text-align: center; letter-spacing: -0.01em; text-transform: uppercase; font-family: Georgia, \"Didot\", serif;",
     "h2": "font-size: 20px; font-weight: 400; color: #1e1e1e !important; line-height: 1.35 !important; margin: 24px 0 12px; text-align: center; padding: 10px 0; border-top: 1px solid #1e1e1e; border-bottom: 1px solid #1e1e1e; font-style: italic; letter-spacing: 0.02em;",
     "h3": "font-size: 17px; font-weight: 700; color: #1e1e1e !important; line-height: 1.4 !important; margin: 20px 0 10px; font-style: italic;",

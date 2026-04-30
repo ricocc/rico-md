@@ -8,7 +8,7 @@
 export const theme = {
   "name": "墨蓝·卫报",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 16px 14px 44px 14px; font-family: -apple-system, \"Helvetica Neue\", \"Noto Sans SC\", Arial, sans-serif; font-size: 15px; line-height: 1.72 !important; color: #121212 !important; background-color: #fff !important; word-wrap: break-word;",
+    "container": "max-width: 100%; margin: 0 auto; padding: 16px 14px 44px 14px; font-family: -apple-system, \"Helvetica Neue\", \"Noto Sans SC\", Arial, sans-serif; font-size: 15px; line-height: 1.72 !important; color: #121212 !important; background-color: #fff !important; word-wrap: break-word;",
     "h1": "font-size: 26px; font-weight: 900; color: #052962 !important; line-height: 1.2 !important; margin: 24px 0 14px; padding-bottom: 10px; border-bottom: 3px solid #C70000;",
     "h2": "font-size: 20px; font-weight: 700; color: #052962 !important; line-height: 1.3 !important; margin: 22px 0 10px; padding: 8px 12px; background-color: #f6f6f6 !important; border-left: 4px solid #C70000;",
     "h3": "font-size: 17px; font-weight: 700; color: #052962 !important; line-height: 1.4 !important; margin: 18px 0 8px;",

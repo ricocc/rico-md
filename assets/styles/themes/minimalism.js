@@ -6,7 +6,7 @@
 export const theme = {
   "name": "简约沉浸",
   "styles": {
-    "container": "max-width: 740px; margin: 0 auto; padding: 10px 8px 28px 8px; font-family: \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei UI\", \"Microsoft YaHei\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif; font-size: 16px; line-height: 1.78 !important; letter-spacing: 0.022em; color: rgba(0, 0, 0, 0.9) !important; background-color: #ffffff !important; word-wrap: break-word; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 10px 8px 28px 8px; font-family: \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei UI\", \"Microsoft YaHei\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif; font-size: 16px; line-height: 1.78 !important; letter-spacing: 0.022em; color: rgba(0, 0, 0, 0.9) !important; background-color: #ffffff !important; word-wrap: break-word; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;",
     "h1": "margin: 42px 8px 20px 8px; font-size: 31px; line-height: 1.28 !important; letter-spacing: 0.008em; color: rgba(0, 0, 0, 0.96) !important; font-weight: 700;",
     "h2": "margin: 36px 8px 18px 8px; font-size: 25px; line-height: 1.34 !important; letter-spacing: 0.006em; color: rgba(0, 0, 0, 0.95) !important; font-weight: 700;",
     "h3": "margin: 30px 8px 14px 8px; font-size: 21px; line-height: 1.4 !important; letter-spacing: 0.004em; color: rgba(0, 0, 0, 0.93) !important; font-weight: 650;",

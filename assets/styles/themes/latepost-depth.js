@@ -6,7 +6,7 @@
 export const theme = {
   "name": "编辑部红",
   "styles": {
-    "container": "max-width: 700px; margin: 0 auto; padding: 16px 12px 40px 12px; font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif; font-size: 17px; line-height: 1.8 !important; color: #1a1a1a !important; background-color: #fff !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 16px 12px 40px 12px; font-family: -apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", sans-serif; font-size: 17px; line-height: 1.8 !important; color: #1a1a1a !important; background-color: #fff !important; word-wrap: break-word;",
     "h1": "font-size: 32px; font-weight: 700; color: #1a1a1a !important; line-height: 1.3 !important; margin: 48px 0 28px; padding-left: 20px; border-left: 6px solid #db5e5e; position: relative;",
     "h2": "font-size: 24px; font-weight: 600; color: #fff !important; line-height: 1.4 !important; margin: 40px 0 24px; padding: 16px 24px; background-color: #db5e5e !important; border-radius: 4px; position: relative;",
     "h3": "font-size: 20px; font-weight: 600; color: #db5e5e !important; line-height: 1.5 !important; margin: 35px 0 20px; padding-left: 16px; border-left: 4px solid #db5e5e; position: relative;",

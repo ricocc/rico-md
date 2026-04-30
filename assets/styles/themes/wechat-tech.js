@@ -6,7 +6,7 @@
 export const theme = {
   "name": "技术风格",
   "styles": {
-    "container": "max-width: 740px; margin: 0 auto; padding: 10px 20px 20px 20px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.75 !important; color: #2c3e50 !important; background-color: #fff !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 10px 20px 20px 20px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.75 !important; color: #2c3e50 !important; background-color: #fff !important; word-wrap: break-word;",
     "h1": "font-size: 26px; font-weight: 700; color: #0a0a0a !important; line-height: 1.3 !important; margin: 36px 0 24px; padding: 0 0 12px; border-bottom: 3px solid #4a7c59;",
     "h2": "font-size: 22px; font-weight: 700; color: #0a0a0a !important; line-height: 1.3 !important; margin: 32px 0 20px; padding-left: 16px; padding-top: 4px; padding-bottom: 4px; border-left: 5px solid #00a67d; background: linear-gradient(to right, #f0f9ff 0%, transparent 100%);",
     "h3": "font-size: 20px; font-weight: 600; color: #2c3e50 !important; line-height: 1.4 !important; margin: 28px 0 18px; padding-left: 12px; border-left: 3px solid #00a67d;",

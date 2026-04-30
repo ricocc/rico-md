@@ -7,7 +7,7 @@
 export const theme = {
   "name": "赭红·编辑",
   "styles": {
-    "container": "max-width: 620px; margin: 0 auto; padding: 20px 18px 50px 18px; font-family: Georgia, \"Noto Serif SC\", \"Songti SC\", Garamond, serif; font-size: 15px; line-height: 1.82 !important; color: #2c2c2c !important; background-color: #faf8f2 !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 20px 18px 50px 18px; font-family: Georgia, \"Noto Serif SC\", \"Songti SC\", Garamond, serif; font-size: 15px; line-height: 1.82 !important; color: #2c2c2c !important; background-color: #faf8f2 !important; word-wrap: break-word;",
     "h1": "font-size: 26px; font-weight: 700; color: #8b1a1a !important; line-height: 1.3 !important; margin: 28px 0 16px; letter-spacing: -0.02em; text-align: center; font-family: Georgia, \"Didot\", serif;",
     "h2": "font-size: 20px; font-weight: 400; color: #2c2c2c !important; line-height: 1.4 !important; margin: 24px 0 12px; border-top: 1px solid #8b1a1a; border-bottom: 1px solid #8b1a1a; padding: 10px 0; text-align: center; letter-spacing: 0.05em; font-family: Georgia, \"Didot\", serif;",
     "h3": "font-size: 17px; font-weight: 700; color: #2c2c2c !important; line-height: 1.45 !important; margin: 20px 0 10px; font-family: Georgia, \"Didot\", serif;",

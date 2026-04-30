@@ -60,6 +60,7 @@ function applyInlineStyles(html, styleConfig, codeTheme) {
     });
   });
 
+  normalizeTableOverflow(doc);
   applyInlineCodeStyles(doc, style);
   applyStandalonePreStyles(doc, style);
   applyCodeBlockStyles(doc, style, codeTheme);
@@ -74,6 +75,29 @@ function appendStyleText(element, styleText) {
   if (!styleText) return;
   const currentStyle = element.getAttribute('style') || '';
   element.setAttribute('style', currentStyle ? `${currentStyle}; ${styleText}` : styleText);
+}
+
+function normalizeTableOverflow(doc) {
+  const tables = Array.from(doc.querySelectorAll('table'));
+
+  tables.forEach((table) => {
+    if (table.closest('.md-table-scroll')) return;
+
+    appendStyleText(table, 'max-width: 100%; width: max-content; min-width: 100%; table-layout: auto;');
+
+    const parent = table.parentNode;
+    if (!parent) return;
+
+    const wrapper = doc.createElement('div');
+    wrapper.className = 'md-table-scroll';
+    wrapper.setAttribute(
+      'style',
+      'max-width: 100%; width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;'
+    );
+
+    parent.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+  });
 }
 
 function applyInlineCodeStyles(doc, style) {

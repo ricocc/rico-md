@@ -6,7 +6,7 @@
 export const theme = {
   "name": "纤细极简",
   "styles": {
-    "container": "max-width: 620px; margin: 0 auto; padding: 16px 24px 40px 24px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Display\", \"SF Pro Text\", \"Helvetica Neue\", Arial, sans-serif; font-size: 17px; line-height: 1.6 !important; color: #6e6e73 !important; background-color: #fff !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 16px 24px 40px 24px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Display\", \"SF Pro Text\", \"Helvetica Neue\", Arial, sans-serif; font-size: 17px; line-height: 1.6 !important; color: #6e6e73 !important; background-color: #fff !important; word-wrap: break-word;",
     "h1": "font-size: 39px; font-weight: 200; color: #1d1d1f !important; line-height: 1.15 !important; margin: 48px 0 24px; letter-spacing: -0.025em;",
     "h2": "font-size: 28px; font-weight: 300; color: #1d1d1f !important; line-height: 1.2 !important; margin: 40px 0 20px; letter-spacing: -0.018em;",
     "h3": "font-size: 20px; font-weight: 400; color: #1d1d1f !important; line-height: 1.25 !important; margin: 32px 0 24px; letter-spacing: -0.008em;",

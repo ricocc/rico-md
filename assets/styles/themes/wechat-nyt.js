@@ -8,7 +8,7 @@
 export const theme = {
   "name": "墨线·报纸",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 18px 16px 44px 16px; font-family: \"Songti SC\", \"Noto Serif SC\", STSong, Georgia, serif; font-size: 15px; line-height: 1.78 !important; color: #1a1a1a !important; background-color: #faf9f6 !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 18px 16px 44px 16px; font-family: \"Songti SC\", \"Noto Serif SC\", STSong, Georgia, serif; font-size: 15px; line-height: 1.78 !important; color: #1a1a1a !important; background-color: #faf9f6 !important; word-wrap: break-word;",
     "h1": "font-size: 26px; font-weight: 900; color: #000 !important; line-height: 1.2 !important; margin: 24px 0 12px; letter-spacing: -0.02em; text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; text-transform: uppercase;",
     "h2": "font-size: 20px; font-weight: 700; color: #000 !important; line-height: 1.3 !important; margin: 22px 0 10px; border-bottom: 1px solid #000; padding-bottom: 6px;",
     "h3": "font-size: 17px; font-weight: 700; color: #1a1a1a !important; line-height: 1.4 !important; margin: 18px 0 8px; font-style: italic;",

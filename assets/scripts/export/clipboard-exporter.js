@@ -201,6 +201,32 @@ function normalizeBlockquotes(doc) {
   });
 }
 
+function normalizeTablesForWechat(doc) {
+  const wrappedTables = doc.querySelectorAll('.md-table-scroll > table');
+  wrappedTables.forEach((table) => {
+    const wrapper = table.parentElement;
+    if (!wrapper || !wrapper.parentNode) return;
+    wrapper.parentNode.insertBefore(table, wrapper);
+    wrapper.remove();
+  });
+
+  doc.querySelectorAll('table').forEach((table) => {
+    const tableStyle = table.getAttribute('style') || '';
+    table.setAttribute(
+      'style',
+      `${tableStyle}; width: 100% !important; max-width: 100% !important; table-layout: fixed !important;`
+    );
+  });
+
+  doc.querySelectorAll('th, td').forEach((cell) => {
+    const cellStyle = cell.getAttribute('style') || '';
+    cell.setAttribute(
+      'style',
+      `${cellStyle}; word-break: break-word; overflow-wrap: anywhere; white-space: normal;`
+    );
+  });
+}
+
 function wrapSectionIfNeeded(doc, styleConfig) {
   const containerBg = extractBackgroundColor(styleConfig.styles.container);
   if (!containerBg || containerBg === '#fff' || containerBg === '#ffffff') return;
@@ -252,6 +278,7 @@ export async function copyToWechat({ renderedHTML, styleConfig, imageStore, show
     const doc = parser.parseFromString(renderedHTML, 'text/html');
 
     convertGridToTable(doc);
+    normalizeTablesForWechat(doc);
 
     const images = Array.from(doc.querySelectorAll('img'));
     if (images.length > 0) {

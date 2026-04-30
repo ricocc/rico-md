@@ -6,7 +6,7 @@
 export const theme = {
   "name": "默认公众号风格",
   "styles": {
-    "container": "max-width: 740px; margin: 0 auto; padding: 10px 10px 20px 10px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.8 !important; color: #3f3f3f !important; background-color: #fff !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 10px 10px 20px 10px; font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.8 !important; color: #3f3f3f !important; background-color: #fff !important; word-wrap: break-word;",
     "h1": "font-size: 22px; font-weight: 600; color: #2c3e50 !important; line-height: 1.4 !important; margin: 40px 0 20px; padding-bottom: 8px; border-bottom: 2px solid #3498db;",
     "h2": "font-size: 20px; font-weight: 600; color: #2c3e50 !important; line-height: 1.4 !important; margin: 32px 0 24px; padding-left: 12px; border-left: 4px solid #3498db;",
     "h3": "font-size: 18px; font-weight: 600; color: #34495e !important; line-height: 1.4 !important; margin: 28px 0 14px;",

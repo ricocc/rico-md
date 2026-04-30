@@ -6,7 +6,7 @@
 export const theme = {
   "name": "Kami \u7d19",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 12px 12px 24px 12px; font-family: \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.75 !important; color: #3d3d3a !important; background-color: #f5f4ed !important; word-wrap: break-word;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 12px 12px 24px 12px; font-family: \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.75 !important; color: #3d3d3a !important; background-color: #f5f4ed !important; word-wrap: break-word;",
     "h1": "margin: 48px 0 24px; padding-bottom: 10px; border-bottom: 2px solid #1B365D; font-family: \"Songti SC\", \"Noto Serif SC\", STSong, Georgia, serif; font-size: 28px; line-height: 1.3 !important; font-weight: 600; color: #141413 !important;",
     "h2": "margin: 36px 0 18px; padding-left: 10px; border-left: 4px solid #1B365D; font-family: \"Songti SC\", \"Noto Serif SC\", STSong, Georgia, serif; font-size: 24px; line-height: 1.35 !important; font-weight: 600; color: #141413 !important;",
     "h3": "margin: 28px 0 14px; font-family: \"Songti SC\", \"Noto Serif SC\", STSong, Georgia, serif; font-size: 20px; line-height: 1.4 !important; font-weight: 600; color: #1B365D !important;",

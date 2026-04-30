@@ -6,7 +6,7 @@
 export const theme = {
   "name": "Apple 极简",
   "styles": {
-    "container": "max-width: 640px; margin: 0 auto; padding: 20px 12px 48px 12px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Display\", \"SF Pro Text\", \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.8 !important; color: #1d1d1f !important; background-color: #fff !important; word-wrap: break-word; letter-spacing: -0.01em;",
+    "container": "max-width: 100%;  margin: 0 auto; padding: 20px 12px 48px 12px; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro Display\", \"SF Pro Text\", \"Helvetica Neue\", Arial, sans-serif; font-size: 15px; line-height: 1.8 !important; color: #1d1d1f !important; background-color: #fff !important; word-wrap: break-word; letter-spacing: -0.01em;",
     "h1": "font-size: 28px; font-weight: 700; color: #1d1d1f !important; line-height: 1.2 !important; margin: 36px 0 24px; letter-spacing: -0.02em; padding-bottom: 10px; border-bottom: 1px solid #e8e8ed;",
     "h2": "font-size: 22px; font-weight: 700; color: #1d1d1f !important; line-height: 1.25 !important; margin: 32px 0 20px; letter-spacing: -0.015em; padding-left: 12px; border-left: 3px solid #06c;",
     "h3": "font-size: 18px; font-weight: 700; color: #1d1d1f !important; line-height: 1.35 !important; margin: 28px 0 16px; letter-spacing: -0.01em;",
