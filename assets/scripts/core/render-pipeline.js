@@ -48,6 +48,7 @@ function applyInlineStyles(html, styleConfig, codeTheme) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
 
+  annotateMathFormulaNodes(doc);
   groupConsecutiveImages(doc);
 
   Object.keys(style).forEach((selector) => {
@@ -69,6 +70,30 @@ function applyInlineStyles(html, styleConfig, codeTheme) {
   container.setAttribute('style', style.container);
   container.innerHTML = doc.body.innerHTML;
   return container.outerHTML;
+}
+
+function annotateMathFormulaNodes(doc) {
+  const annotations = Array.from(doc.querySelectorAll('annotation[encoding="application/x-tex"]'));
+  const seen = new Set();
+
+  annotations.forEach((annotation) => {
+    const formulaRoot = annotation.closest('.katex-display') || annotation.closest('.katex');
+    if (!formulaRoot || seen.has(formulaRoot)) return;
+
+    const latex = normalizeFormulaSource(annotation.textContent || '');
+    if (!latex) return;
+
+    seen.add(formulaRoot);
+    formulaRoot.setAttribute('data-formula-source', latex);
+    formulaRoot.setAttribute('data-math-mode', formulaRoot.classList.contains('katex-display') ? 'display' : 'inline');
+  });
+}
+
+function normalizeFormulaSource(value) {
+  return String(value || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .trim();
 }
 
 function appendStyleText(element, styleText) {

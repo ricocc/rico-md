@@ -3,6 +3,8 @@
  * @module clipboard-exporter
  */
 
+import { convertMathForWechat, stripFormulaExportMetadata } from './math-exporter.js';
+
 function extractBackgroundColor(styleString) {
   if (!styleString) return null;
 
@@ -185,7 +187,9 @@ function toWechatCodeHTML(codeText) {
 
 function flattenListItems(doc) {
   doc.querySelectorAll('li').forEach((item) => {
-    const text = (item.textContent || '').replace(/\s+/g, ' ').trim();
+    const clone = item.cloneNode(true);
+    replaceFormulaNodesWithPlainText(clone);
+    const text = (clone.textContent || '').replace(/\s+/g, ' ').trim();
     item.innerHTML = '';
     item.textContent = text;
   });
@@ -251,6 +255,8 @@ function wrapSectionIfNeeded(doc, styleConfig) {
 function buildClipboardPlainText(doc) {
   const clone = doc.body.cloneNode(true);
 
+  replaceFormulaNodesWithPlainText(clone);
+
   clone.querySelectorAll('br').forEach((br) => {
     br.replaceWith('\n');
   });
@@ -265,6 +271,13 @@ function buildClipboardPlainText(doc) {
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+}
+
+function replaceFormulaNodesWithPlainText(root) {
+  root.querySelectorAll('[data-formula-plain]').forEach((node) => {
+    const formulaText = node.getAttribute('data-formula-plain') || '';
+    node.replaceWith(root.ownerDocument.createTextNode(formulaText));
+  });
 }
 
 export async function copyToWechat({ renderedHTML, styleConfig, imageStore, showToast, codeTheme }) {
@@ -293,13 +306,15 @@ export async function copyToWechat({ renderedHTML, styleConfig, imageStore, show
       }));
     }
 
+    await convertMathForWechat(doc);
     convertCodeBlocks(doc, styleConfig, codeTheme);
     flattenListItems(doc);
     normalizeBlockquotes(doc);
     wrapSectionIfNeeded(doc, styleConfig);
 
-    const html = doc.body.innerHTML;
     const text = buildClipboardPlainText(doc);
+    stripFormulaExportMetadata(doc.body);
+    const html = doc.body.innerHTML;
 
     const item = new ClipboardItem({
       'text/html': new Blob([html], { type: 'text/html' }),

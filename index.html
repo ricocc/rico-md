@@ -18,6 +18,17 @@
   <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.0.0/dist/markdown-it.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/markdown-it-texmath@1.0.0/texmath.min.js"></script>
+  <script>
+    window.MathJax = {
+      startup: {
+        typeset: false
+      },
+      svg: {
+        fontCache: 'none'
+      }
+    };
+  </script>
+  <script id="mathjax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/dist/turndown.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@3.4.15/dist/vue.global.prod.js"></script>

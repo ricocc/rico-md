@@ -21,7 +21,7 @@ export const theme = {
     "ol": "margin: 0 0 14px; padding-left: 24px;",
     "li": "margin: 6px 0; line-height: 1.9 !important; color: #4a4a45 !important; font-size: 15px;",
     "blockquote": "margin: 0 0 14px; padding: 16px 20px; background: rgba(255, 255, 255, 0.12) !important; border-left: 3px solid #cf4436; color: #4a4a45 !important; font-size: 14px; line-height: 1.8 !important; border-radius: 0 6px 6px 0;",
-    "code": "font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; font-size: 13.5px; padding: 1px 5px; background: rgba(26, 26, 24, 0.06) !important;  border-radius: 3px;",
+    "code": "font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; font-size: 13.5px; padding: 1px 5px;   border-radius: 3px;",
     "pre": "margin: 14px 0; padding: 20px; background: rgba(26, 26, 24, 0.06) !important; font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; font-size: 13px; border-radius: 8px; overflow-x: auto; line-height: 1.6 !important; color: #007aaa !important;",
     "hr": "margin: 0 auto; border: none; border-top: 1px solid rgba(120, 120, 112, 0.18); max-width: 100%; ",
     "img": "max-width: 100%; max-height: 600px !important; height: auto; display: block; margin: 8px auto; border-radius: 6px;box-shadow:0 1px 3px rgba(207, 68, 54, 0.1); ",

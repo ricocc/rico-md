@@ -277,7 +277,14 @@
 .preview-container .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 4px 0;
+  padding: 12px 4px 12px;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.preview-container .katex-display > .katex {
+  display: inline-block;
+  min-width: max-content;
 }
 
 /* ── Empty State ── */
